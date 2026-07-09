@@ -15,5 +15,11 @@
    - Created password reset endpoints using Console Email Backend for secure token generation (FR-3).
    - Integrated `pyotp` for TOTP-based optional Multi-Factor Authentication (2FA) with 2-step verification endpoints (FR-4).
 
+3. **Customer & Vendor Management (Contacts)** ✅
+   - Created unified `Contact` model supporting both Customers and Vendors (FR-6).
+   - Implemented soft-delete logic: Prevents deletion of contacts associated with posted transactions, falling back to deactivation (`is_active = False`) (FR-8).
+   - Added custom dynamic decimal property `outstanding_balance` (FR-7).
+   - Protected all contact endpoints with JWT Auth.
+
 ---
 *Last Updated: Today*

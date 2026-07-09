@@ -37,6 +37,8 @@ def api_root(request):
         'invoices_endpoint': '/api/v1/invoices/',
         'payments_endpoint': '/api/v1/payments/',
         'credit_notes_endpoint': '/api/v1/credit-notes/',
+        'accounts_endpoint': '/api/v1/accounts/',
+        'journal_entries_endpoint': '/api/v1/journal-entries/',
     })
 
 
@@ -48,4 +50,5 @@ urlpatterns = [
     path('api/v1/', include('items.urls')),
     path('api/v1/', include('invoices.urls')),
     path('api/v1/', include('payments.urls')),
+    path('api/v1/', include('accounting.urls')),
 ]

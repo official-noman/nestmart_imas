@@ -1,22 +1,19 @@
 # Nestmart IMAS - Invoice Management & Accounting System
 
-## Project Setup & Status
+## Project Status: Backend MVP Complete 🚀
 
-### Completed Modules:
-1. **Project Setup & Architecture (Django + Next.js)** ✅
-2. **Auth & Authorization (JWT, RBAC & 2FA)** ✅
-3. **Customer & Vendor Management (Contacts)** ✅
-4. **Product & Service Catalog (Items)** ✅
-5. **Invoicing & Calculations (Invoices)** ✅
-6. **Payments & Allocations (Payments)** ✅
+### Completed Modules (Backend):
+1. **Project Setup & Architecture:** Django + DRF, SQLite (ready for PostgreSQL), `django-environ` for security. ✅
+2. **Auth & Authorization:** JWT, Roles (Admin/Accountant), 2FA, Console Password Reset. ✅
+3. **Customer & Vendor Management:** CRUD, Soft Delete, Dynamic Outstanding Balances. ✅
+4. **Product & Service Catalog:** CRUD, Negative Stock Prevention. ✅
+5. **Invoicing:** Nested Serializers, Auto Tax/Discount/Total Calculations, Sequential Numbering, Auto Overdue. ✅
+6. **Payments & Allocations:** Multi-invoice payment splitting, Auto Invoice Status Updates (Paid/Partially Paid). ✅
+7. **Accounting Core:** Double-Entry Ledger, Immutable Journal Entries, Debit=Credit strict validation, Auto-Journals via Signals. ✅
+8. **Tax & Settings:** Configurable Tax Rates and Company Profiles (Admin only). ✅
+9. **Audit & Logs:** `django-simple-history` integrated for full database change tracking. ✅
+10. **Dashboard & Reporting:** Automated KPIs (Revenue, Receivables) and P&L generation APIs. ✅
 
-7. **Accounting Core (Double-Entry Ledger)** ✅
-   - Implemented `Account` model for configurable Chart of Accounts (FR-22).
-   - Implemented `JournalEntry` and `JournalLine` models tracking immutable financial records (FR-24, FR-25).
-   - Enforced hard immutability rules: updating or deleting posted entries throws strict validation errors (FR-27).
-   - Enforced double-entry constraints (Debits = Credits) during serializer validation (FR-26).
-   - Created Django signals to automatically generate balanced journal entries upon Invoice creation and Payment allocation (FR-23).
-   - Created a management command to seed default COA accounts (1000 Cash, 1200 AR, 4000 Sales).
-
+*Backend API is fully tested and ready for Next.js Frontend integration.*
 ---
 *Last Updated: Today*

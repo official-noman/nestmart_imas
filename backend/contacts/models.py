@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class Contact(models.Model):
@@ -27,6 +28,7 @@ class Contact(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['name']

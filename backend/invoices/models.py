@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models, transaction
 from django.utils.dateparse import parse_date
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact
 from items.models import Item
@@ -56,6 +57,7 @@ class Invoice(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['-issue_date', '-id']

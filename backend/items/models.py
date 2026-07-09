@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class Item(models.Model):
@@ -35,6 +36,7 @@ class Item(models.Model):
     stock_quantity = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['name']

@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.db import models
 from django.db.models import Sum
+from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact
 from invoices.models import Invoice
@@ -36,6 +37,7 @@ class Payment(models.Model):
     )
     payment_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ['-payment_date', '-id']

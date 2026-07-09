@@ -15,8 +15,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.http import JsonResponse
+from django.urls import include, path
+
+
+def api_root(request):
+    return JsonResponse({
+        'message': 'IMAS API is running.',
+        'auth_endpoints': {
+            'register': '/api/auth/register/',
+            'login': '/api/auth/login/',
+            'refresh': '/api/auth/refresh/',
+            'password_reset': '/api/auth/password-reset/',
+            'password_reset_confirm': '/api/auth/password-reset-confirm/',
+            'enable_2fa': '/api/auth/2fa/enable/',
+            'confirm_2fa': '/api/auth/2fa/confirm/',
+            'verify_2fa_login': '/api/auth/login/verify-2fa/',
+        },
+    })
+
 
 urlpatterns = [
+    path('', api_root, name='api_root'),
     path('admin/', admin.site.urls),
+    path('api/auth/', include('users.urls')),
 ]

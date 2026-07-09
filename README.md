@@ -34,5 +34,11 @@
    - Built automatic line-level and invoice-level calculation engines using Decimals for subtotal, discount totals, tax totals, and grand totals (FR-14).
    - Built writable nested serializers to allow creating and updating invoices with multiple items in a single HTTP request.
 
+6. **Payments & Allocations (Payments)** ✅
+   - Created `Payment`, `PaymentAllocation` (for splitting a single payment across multiple invoices), and `CreditNote` (for credits and refunds) models (FR-18, FR-20, FR-21).
+   - Implemented real-time, signal-like status updates: Automatically transitions Invoice statuses to `Paid` or `Partially Paid` based on payments received (FR-19).
+   - Added strict validation to ensure payment allocation amounts do not exceed the total payment amount.
+   - Exposed protected DRF viewsets at `/api/v1/payments/` and `/api/v1/credit-notes/`.
+
 ---
 *Last Updated: Today*

@@ -33,6 +33,8 @@ def api_root(request):
             'verify_2fa_login': '/api/auth/login/verify-2fa/',
         },
         'contacts_endpoint': '/api/v1/contacts/',
+        'items_endpoint': '/api/v1/items/',
+        'invoices_endpoint': '/api/v1/invoices/',
     })
 
 
@@ -41,4 +43,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('users.urls')),
     path('api/v1/', include('contacts.urls')),
+    path('api/v1/', include('items.urls')),
+    path('api/v1/', include('invoices.urls')),
 ]

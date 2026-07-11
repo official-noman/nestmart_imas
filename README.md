@@ -22,6 +22,7 @@
 5. *Customer & Vendor Management UI:* Custom designed tables with badge statuses and modern backdrop-blurred modals for adding customers. ✅
 6. *Product Catalog UI:* Customized items table displaying stock levels with low-stock warnings and modal forms for item creation. ✅
 7. *System Settings UI:* Built two-column layout containing the Company Profile editor form and the Tax Configuration grid with tax creation modals. ✅
+8. *Invoicing UI (Live Calculator):* Custom designed Invoice List table with KPI status strips, and a fully reactive Invoice Creator form featuring real-time nested calculation arrays (Subtotal, Tax, Discounts, Grand Total) on keystrokes. ✅
 
 ---
 Last Updated: Today

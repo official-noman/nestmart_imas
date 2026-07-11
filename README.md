@@ -23,6 +23,7 @@
 6. *Product Catalog UI:* Customized items table displaying stock levels with low-stock warnings and modal forms for item creation. ✅
 7. *System Settings UI:* Built two-column layout containing the Company Profile editor form and the Tax Configuration grid with tax creation modals. ✅
 8. *Invoicing UI (Live Calculator):* Custom designed Invoice List table with KPI status strips, and a fully reactive Invoice Creator form featuring real-time nested calculation arrays (Subtotal, Tax, Discounts, Grand Total) on keystrokes. ✅
+9. *Payments & Allocations UI:* Custom designed receipts list, and a smart split-payment allocation wizard with real-time balance tracking, dynamic customer-invoice filtering, and over-allocation prevention. ✅
 
 ---
 Last Updated: Today

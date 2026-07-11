@@ -25,6 +25,7 @@
 8. *Invoicing UI (Live Calculator):* Custom designed Invoice List table with KPI status strips, and a fully reactive Invoice Creator form featuring real-time nested calculation arrays (Subtotal, Tax, Discounts, Grand Total) on keystrokes. ✅
 9. *Payments & Allocations UI:* Custom designed receipts list, and a smart split-payment allocation wizard with real-time balance tracking, dynamic customer-invoice filtering, and over-allocation prevention. ✅
 10. *Accounting Core & General Ledger UI:* Configurable Chart of Accounts grouped by types, expandable general ledger table rendering sub-lines dynamically, and an automated Manual Journal Entry creator featuring a live real-time debit/credit balancing verification engine. ✅
+11. *Profit & Loss Financial Report UI:* Custom built corporate-level financial P&L statement featuring real-time balance calculations, standard accounting double-underlines, and a print-optimized layout that automatically strips UI elements for native PDF printing. ✅
 
 ---
 Last Updated: Today

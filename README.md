@@ -1,6 +1,6 @@
 # Nestmart IMAS - Invoice Management & Accounting System
 
-## Project Status: Full-Stack MVP In Progress 🚀
+## Project Status: Full-Stack MVP Complete 🚀
 
 ### Completed Modules (Backend API):
 1. *Project Setup & Architecture:* Django + DRF, SQLite (ready for PostgreSQL), django-environ for security. ✅
@@ -24,6 +24,7 @@
 7. *System Settings UI:* Built two-column layout containing the Company Profile editor form and the Tax Configuration grid with tax creation modals. ✅
 8. *Invoicing UI (Live Calculator):* Custom designed Invoice List table with KPI status strips, and a fully reactive Invoice Creator form featuring real-time nested calculation arrays (Subtotal, Tax, Discounts, Grand Total) on keystrokes. ✅
 9. *Payments & Allocations UI:* Custom designed receipts list, and a smart split-payment allocation wizard with real-time balance tracking, dynamic customer-invoice filtering, and over-allocation prevention. ✅
+10. *Accounting Core & General Ledger UI:* Configurable Chart of Accounts grouped by types, expandable general ledger table rendering sub-lines dynamically, and an automated Manual Journal Entry creator featuring a live real-time debit/credit balancing verification engine. ✅
 
 ---
 Last Updated: Today

@@ -1,5 +1,6 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+
+from users.permissions import IsAccountant
 
 from .models import Invoice
 from .serializers import InvoiceSerializer
@@ -8,7 +9,7 @@ from .serializers import InvoiceSerializer
 class InvoiceViewSet(viewsets.ModelViewSet):
     queryset = Invoice.objects.prefetch_related('lines').select_related('customer')
     serializer_class = InvoiceSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAccountant]
 
     def get_queryset(self):
         Invoice.mark_overdue_invoices()

@@ -1,0 +1,28 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [
+    "*/migrations/*",
+    "backend/venv",
+    "frontend",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "core",
+    "users",
+    "contacts",
+    "items",
+    "invoices",
+    "payments",
+    "accounting",
+    "core_settings",
+    "reports",
+]
+
+[tool.django-stubs]
+django_settings_module = "core.settings.dev"

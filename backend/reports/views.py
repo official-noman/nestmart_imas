@@ -1,35 +1,44 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Sum
+from django.db.models import Q, Sum
 from decimal import Decimal
 from django.db.models.functions import Coalesce
 
 from accounting.models import JournalLine
 from invoices.models import Invoice
+from payments.models import PaymentAllocation
+from users.permissions import IsAccountant
+
+ZERO = Decimal('0.00')
+
 
 class DashboardKPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # total_receivables
-        ar_lines = JournalLine.objects.filter(account__code='1200')
-        debits = ar_lines.filter(entry_type=JournalLine.EntryType.DEBIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        credits = ar_lines.filter(entry_type=JournalLine.EntryType.CREDIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        total_receivables = debits - credits
+        # total_receivables: net AR balance (debits - credits) in one query.
+        ar_totals = JournalLine.objects.filter(account__code='1200').aggregate(
+            debits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.DEBIT)), ZERO),
+            credits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.CREDIT)), ZERO),
+        )
+        total_receivables = ar_totals['debits'] - ar_totals['credits']
 
         # total_revenue
         total_revenue = Invoice.objects.filter(status=Invoice.Status.PAID).aggregate(
-            total=Coalesce(Sum('grand_total'), Decimal('0.00'))
+            total=Coalesce(Sum('grand_total'), ZERO)
         )['total']
 
-        # overdue_amount
-        overdue_invoices = Invoice.objects.filter(status=Invoice.Status.OVERDUE).annotate(
-            total_paid=Coalesce(Sum('allocations__amount_allocated'), Decimal('0.00'))
-        )
-        overdue_amount = Decimal('0.00')
-        for inv in overdue_invoices:
-            overdue_amount += (inv.grand_total - inv.total_paid)
+        # overdue_amount: invoiced total minus allocated payments, both as
+        # single aggregates (a join-based Sum would double count grand_total
+        # once per allocation row, so this is deliberately two queries).
+        overdue_invoiced = Invoice.objects.filter(status=Invoice.Status.OVERDUE).aggregate(
+            total=Coalesce(Sum('grand_total'), ZERO)
+        )['total']
+        overdue_paid = PaymentAllocation.objects.filter(
+            invoice__status=Invoice.Status.OVERDUE
+        ).aggregate(total=Coalesce(Sum('amount_allocated'), ZERO))['total']
+        overdue_amount = overdue_invoiced - overdue_paid
 
         return Response({
             'total_receivables': total_receivables,
@@ -37,25 +46,24 @@ class DashboardKPIView(APIView):
             'overdue_amount': overdue_amount,
         })
 
+
 class ProfitAndLossView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAccountant]
 
     def get(self, request):
-        # total_income
-        income_lines = JournalLine.objects.filter(account__account_type='Income')
-        # Income usually increases with CREDIT and decreases with DEBIT. 
-        # But wait, sum of JournalLines for Income accounts. The prompt says "Sum of JournalLines for Income accounts"
-        # We can sum CREDITS - DEBITS.
-        income_credits = income_lines.filter(entry_type=JournalLine.EntryType.CREDIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        income_debits = income_lines.filter(entry_type=JournalLine.EntryType.DEBIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        total_income = income_credits - income_debits
+        # Income accounts increase with CREDIT, decrease with DEBIT.
+        income_totals = JournalLine.objects.filter(account__account_type='Income').aggregate(
+            credits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.CREDIT)), ZERO),
+            debits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.DEBIT)), ZERO),
+        )
+        total_income = income_totals['credits'] - income_totals['debits']
 
-        # total_expense
-        expense_lines = JournalLine.objects.filter(account__account_type='Expense')
-        # Expenses increase with DEBIT and decrease with CREDIT
-        expense_debits = expense_lines.filter(entry_type=JournalLine.EntryType.DEBIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        expense_credits = expense_lines.filter(entry_type=JournalLine.EntryType.CREDIT).aggregate(total=Coalesce(Sum('amount'), Decimal('0.00')))['total']
-        total_expense = expense_debits - expense_credits
+        # Expense accounts increase with DEBIT, decrease with CREDIT.
+        expense_totals = JournalLine.objects.filter(account__account_type='Expense').aggregate(
+            debits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.DEBIT)), ZERO),
+            credits=Coalesce(Sum('amount', filter=Q(entry_type=JournalLine.EntryType.CREDIT)), ZERO),
+        )
+        total_expense = expense_totals['debits'] - expense_totals['credits']
 
         net_profit = total_income - total_expense
 

@@ -1,14 +1,15 @@
 from decimal import Decimal
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Q, Sum
 from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact
+from core.models import CreatedAtModel
 from invoices.models import Invoice
 
 
-class Payment(models.Model):
+class Payment(CreatedAtModel):
     class PaymentMethod(models.TextChoices):
         CASH = 'Cash', 'Cash'
         BANK_TRANSFER = 'Bank Transfer', 'Bank Transfer'
@@ -36,11 +37,19 @@ class Payment(models.Model):
         help_text='Cheque No, Txn ID, etc.',
     )
     payment_date = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
     history = HistoricalRecords()
 
     class Meta:
         ordering = ['-payment_date', '-id']
+        indexes = [
+            models.Index(fields=['payment_date']),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(amount__gt=0),
+                name='payment_amount_positive',
+            ),
+        ]
 
     def __str__(self):
         return f'{self.customer.name} - {self.amount}'
@@ -61,28 +70,12 @@ class PaymentAllocation(models.Model):
 
     class Meta:
         ordering = ['id']
-
-    def save(self, *args, **kwargs):
-        old_invoice_id = None
-        if self.pk:
-            old_invoice_id = (
-                PaymentAllocation.objects.filter(pk=self.pk)
-                .values_list('invoice_id', flat=True)
-                .first()
-            )
-
-        super().save(*args, **kwargs)
-        self.update_invoice_status(self.invoice)
-
-        if old_invoice_id and old_invoice_id != self.invoice_id:
-            old_invoice = Invoice.objects.get(pk=old_invoice_id)
-            self.update_invoice_status(old_invoice)
-
-    def delete(self, *args, **kwargs):
-        invoice = self.invoice
-        result = super().delete(*args, **kwargs)
-        self.update_invoice_status(invoice)
-        return result
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(amount_allocated__gt=0),
+                name='paymentallocation_amount_positive',
+            ),
+        ]
 
     @classmethod
     def update_invoice_status(cls, invoice):
@@ -104,7 +97,7 @@ class PaymentAllocation(models.Model):
         return f'{self.payment} -> {self.invoice.invoice_number}'
 
 
-class CreditNote(models.Model):
+class CreditNote(CreatedAtModel):
     class NoteType(models.TextChoices):
         CREDIT_NOTE = 'Credit Note', 'Credit Note'
         REFUND = 'Refund', 'Refund'
@@ -124,7 +117,6 @@ class CreditNote(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     note_type = models.CharField(max_length=50, choices=NoteType.choices)
     reason = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at', '-id']

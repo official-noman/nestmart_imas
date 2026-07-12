@@ -3,8 +3,10 @@ from decimal import Decimal
 from django.db import models
 from simple_history.models import HistoricalRecords
 
+from core.models import TimeStampedModel
 
-class Item(models.Model):
+
+class Item(TimeStampedModel):
     sku = models.CharField(
         max_length=100,
         unique=True,
@@ -34,8 +36,6 @@ class Item(models.Model):
         help_text='Whether to track inventory for this item',
     )
     stock_quantity = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
     class Meta:

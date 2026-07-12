@@ -16,10 +16,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password', 'role')
-        read_only_fields = ('id',)
-        extra_kwargs = {
-            'role': {'required': False},
-        }
+        read_only_fields = ('id', 'role')
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -135,4 +132,9 @@ def get_tokens_for_user(user):
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
+        'user': {
+            'username': user.username,
+            'email': user.email,
+            'role': getattr(user, 'role', None),
+        }
     }

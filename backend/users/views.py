@@ -1,5 +1,6 @@
 import pyotp
 from rest_framework import generics, permissions, status
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -31,6 +32,8 @@ class UserRegistrationView(generics.CreateAPIView):
 
 class PasswordResetView(APIView):
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = (ScopedRateThrottle,)
+    throttle_scope = 'password_reset'
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
@@ -50,6 +53,8 @@ class PasswordResetConfirmView(APIView):
 
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = (ScopedRateThrottle,)
+    throttle_scope = 'login'
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data, context={'request': request})
@@ -64,6 +69,8 @@ class LoginView(APIView):
 
 class TwoFALoginVerifyView(APIView):
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = (ScopedRateThrottle,)
+    throttle_scope = 'verify_2fa'
 
     def post(self, request):
         serializer = TwoFALoginVerifySerializer(data=request.data)
@@ -74,7 +81,7 @@ class TwoFALoginVerifyView(APIView):
 class TwoFAEnableView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request):
+    def post(self, request):
         user = request.user
         secret = pyotp.random_base32()
         user.totp_secret = secret

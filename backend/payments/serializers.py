@@ -4,6 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from .models import CreditNote, Payment, PaymentAllocation
+from .services import create_payment_allocation
 
 
 class PaymentAllocationSerializer(serializers.ModelSerializer):
@@ -54,7 +55,11 @@ class PaymentSerializer(serializers.ModelSerializer):
         payment = Payment.objects.create(**validated_data)
 
         for allocation_data in allocations_data:
-            PaymentAllocation.objects.create(payment=payment, **allocation_data)
+            create_payment_allocation(
+                payment=payment,
+                invoice=allocation_data['invoice'],
+                amount_allocated=allocation_data['amount_allocated'],
+            )
 
         return payment
 

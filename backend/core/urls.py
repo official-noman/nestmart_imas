@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 
 def api_root(request):
@@ -39,12 +44,26 @@ def api_root(request):
         'credit_notes_endpoint': '/api/v1/credit-notes/',
         'accounts_endpoint': '/api/v1/accounts/',
         'journal_entries_endpoint': '/api/v1/journal-entries/',
+        'api_schema': '/api/schema/',
+        'api_docs_swagger': '/api/schema/swagger-ui/',
+        'api_docs_redoc': '/api/schema/redoc/',
     })
 
 
 urlpatterns = [
     path('', api_root, name='api_root'),
     path('admin/', admin.site.urls),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path(
+        'api/schema/swagger-ui/',
+        SpectacularSwaggerView.as_view(url_name='schema'),
+        name='swagger-ui',
+    ),
+    path(
+        'api/schema/redoc/',
+        SpectacularRedocView.as_view(url_name='schema'),
+        name='redoc',
+    ),
     path('api/auth/', include('users.urls')),
     path('api/v1/', include('contacts.urls')),
     path('api/v1/', include('items.urls')),

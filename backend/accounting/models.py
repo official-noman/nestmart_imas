@@ -3,9 +3,11 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.db import models, transaction
+from django.db.models import Q
 from django.utils import timezone
 
 from contacts.models import Contact
+from core.models import CreatedAtModel
 
 
 IMMUTABLE_UPDATE_MESSAGE = 'Posted journal entries are immutable and cannot be modified.'
@@ -36,7 +38,7 @@ class Account(models.Model):
         return f'{self.code} - {self.name}'
 
 
-class JournalEntry(models.Model):
+class JournalEntry(CreatedAtModel):
     class Source(models.TextChoices):
         MANUAL = 'Manual', 'Manual'
         INVOICE = 'Invoice', 'Invoice'
@@ -50,10 +52,12 @@ class JournalEntry(models.Model):
         choices=Source.choices,
         default=Source.MANUAL,
     )
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-date', '-id']
+        indexes = [
+            models.Index(fields=['date']),
+        ]
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -124,6 +128,12 @@ class JournalLine(models.Model):
 
     class Meta:
         ordering = ['id']
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(amount__gt=0),
+                name='journalline_amount_positive',
+            ),
+        ]
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -153,3 +163,41 @@ def create_journal_entry(*, date, description, source, lines):
                 amount=Decimal(line['amount']),
             )
         return journal_entry
+
+
+def post_double_entry(
+    *,
+    date,
+    description,
+    source,
+    debit_account_code,
+    credit_account_code,
+    amount,
+    debit_contact=None,
+    credit_contact=None,
+):
+    """Post a simple two-line debit/credit journal entry between two accounts
+    looked up by code. Returns None without posting anything if either
+    account code isn't configured yet in the chart of accounts."""
+    try:
+        debit_account = Account.objects.get(code=debit_account_code)
+        credit_account = Account.objects.get(code=credit_account_code)
+    except Account.DoesNotExist:
+        return None
+
+    lines = [
+        {
+            'account': debit_account,
+            'contact': debit_contact,
+            'entry_type': JournalLine.EntryType.DEBIT,
+            'amount': amount,
+        },
+        {
+            'account': credit_account,
+            'contact': credit_contact,
+            'entry_type': JournalLine.EntryType.CREDIT,
+            'amount': amount,
+        },
+    ]
+
+    return create_journal_entry(date=date, description=description, source=source, lines=lines)

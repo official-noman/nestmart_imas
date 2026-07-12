@@ -2,6 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from .models import Invoice, InvoiceLineItem
+from .services import create_invoice
 
 
 class InvoiceLineItemSerializer(serializers.ModelSerializer):
@@ -42,6 +43,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             'id',
+            'status',
             'subtotal',
             'discount_total',
             'tax_total',
@@ -50,16 +52,9 @@ class InvoiceSerializer(serializers.ModelSerializer):
             'updated_at',
         )
 
-    @transaction.atomic
     def create(self, validated_data):
         lines_data = validated_data.pop('lines', [])
-        invoice = Invoice.objects.create(**validated_data)
-
-        for line_data in lines_data:
-            InvoiceLineItem.objects.create(invoice=invoice, **line_data)
-
-        invoice.calculate_totals()
-        return invoice
+        return create_invoice(lines=lines_data, **validated_data)
 
     @transaction.atomic
     def update(self, instance, validated_data):

@@ -1,0 +1,23 @@
+# Core framework
+Django==6.0.7
+djangorestframework==3.17.1
+asgiref==3.11.1
+sqlparse==0.5.5
+
+# Auth
+djangorestframework-simplejwt==5.5.1
+PyJWT==2.13.0
+PyOTP==2.10.0
+
+# Config / infra
+django-environ==0.14.0
+django-cors-headers==4.9.0
+django-simple-history==3.12.0
+drf-spectacular==0.30.0
+
+# --- Dev / test tooling ---
+pytest==8.3.4
+pytest-django==4.9.0
+factory_boy==3.3.1
+ruff==0.8.6
+django-stubs==5.1.1

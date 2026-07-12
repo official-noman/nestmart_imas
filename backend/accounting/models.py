@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
-from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Q
 from django.utils import timezone
@@ -71,14 +70,8 @@ class JournalEntry(CreatedAtModel):
 
     @classmethod
     def _generate_entry_number(cls):
-        prefix = getattr(settings, 'JOURNAL_ENTRY_NUMBER_PREFIX', 'JE')
-        number_format = getattr(
-            settings,
-            'JOURNAL_ENTRY_NUMBER_FORMAT',
-            '{prefix}-{year}-{sequence:04d}',
-        )
         year = timezone.now().year
-        entry_prefix = f'{prefix}-{year}-'
+        entry_prefix = f'JE-{year}-'
 
         with transaction.atomic():
             latest_entry = (
@@ -95,11 +88,7 @@ class JournalEntry(CreatedAtModel):
                 except (IndexError, ValueError):
                     next_number = 1
 
-        return number_format.format(
-            prefix=prefix,
-            year=year,
-            sequence=next_number,
-        )
+        return f'{entry_prefix}{next_number:04d}'
 
     def __str__(self):
         return self.entry_number

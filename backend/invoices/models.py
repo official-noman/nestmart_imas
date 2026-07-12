@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from django.conf import settings
 from django.db import models, transaction
 from django.db.models import Q
 from django.utils.dateparse import parse_date
@@ -85,14 +84,8 @@ class Invoice(TimeStampedModel):
 
     @classmethod
     def _generate_invoice_number(cls):
-        prefix = getattr(settings, 'INVOICE_NUMBER_PREFIX', 'INV')
-        number_format = getattr(
-            settings,
-            'INVOICE_NUMBER_FORMAT',
-            '{prefix}-{year}-{sequence:04d}',
-        )
         year = timezone.now().year
-        sequence_key = f'{prefix}-{year}'
+        sequence_key = f'INV-{year}'
 
         # Locking a dedicated counter row (rather than the latest Invoice row)
         # avoids the race where two concurrent requests both see "no invoices
@@ -106,11 +99,7 @@ class Invoice(TimeStampedModel):
             sequence.save(update_fields=['last_number'])
             next_number = sequence.last_number
 
-        return number_format.format(
-            prefix=prefix,
-            year=year,
-            sequence=next_number,
-        )
+        return f'{sequence_key}-{next_number:04d}'
 
     def calculate_totals(self):
         subtotal = Decimal('0.00')

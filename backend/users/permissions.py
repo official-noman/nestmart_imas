@@ -17,18 +17,10 @@ class HasRole(BasePermission):
         )
 
 
-class IsAdmin(HasRole):
-    allowed_roles = (CustomUser.Role.ADMIN,)
-
-
 class IsAccountant(HasRole):
     """Admins and Accountants: manage invoices, payments, and the ledger."""
 
     allowed_roles = (CustomUser.Role.ADMIN, CustomUser.Role.ACCOUNTANT)
-
-
-class IsManager(HasRole):
-    allowed_roles = (CustomUser.Role.ADMIN, CustomUser.Role.MANAGER)
 
 
 class IsAdminOrReadOnly(BasePermission):

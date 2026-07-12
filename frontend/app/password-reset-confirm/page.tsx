@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { getApiErrorData } from '@/lib/api';
+import { API_BASE_URL, getApiErrorData } from '@/lib/api';
 import { Mail, Lock, KeyRound, ArrowRight, Loader2, AlertCircle, CheckCircle, ChevronLeft, Eye, EyeOff } from 'lucide-react';
 
 type FieldErrors = { email?: string[]; token?: string[]; new_password?: string[] };
@@ -39,7 +39,7 @@ export default function PasswordResetConfirmPage() {
     setLoading(true);
     setGlobalError(null);
     try {
-      await axios.post('http://127.0.0.1:8000/api/auth/password-reset-confirm/', form);
+      await axios.post(`${API_BASE_URL}/api/auth/password-reset-confirm/`, form);
       setSuccess(true);
       setTimeout(() => router.push('/login?reset=true'), 2000);
     } catch (err) {

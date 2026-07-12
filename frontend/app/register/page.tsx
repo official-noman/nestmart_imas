@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { getApiErrorData } from '@/lib/api';
+import { API_BASE_URL, getApiErrorData } from '@/lib/api';
 import { User, Mail, Lock, ChevronDown, CheckCircle, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 
 const ROLES = [
@@ -55,7 +55,7 @@ export default function RegisterPage() {
     setLoading(true);
     setGlobalError(null);
     try {
-      await axios.post('http://127.0.0.1:8000/api/auth/register/', form);
+      await axios.post(`${API_BASE_URL}/api/auth/register/`, form);
       setSuccess(true);
       setTimeout(() => router.push('/login?registered=true'), 1800);
     } catch (err) {

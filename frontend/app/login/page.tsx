@@ -4,7 +4,7 @@ import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
-import { getApiErrorData } from '@/lib/api';
+import { API_BASE_URL, getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 
@@ -34,7 +34,7 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/auth/login/', {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login/`, {
         email,
         password,
       });

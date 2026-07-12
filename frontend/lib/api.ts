@@ -1,8 +1,20 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+// NEXT_PUBLIC_API_URL is inlined at build time -- fail loudly if it's
+// missing rather than silently falling back to a localhost URL that would
+// break every API call (including login) in production.
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_BASE_URL) {
+  throw new Error(
+    'NEXT_PUBLIC_API_URL is not set. Copy .env.local.example to .env.local ' +
+    '(for local dev) or set it in your deployment environment before building.'
+  );
+}
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: API_BASE_URL,
 });
 
 // Request interceptor to add the JWT access token

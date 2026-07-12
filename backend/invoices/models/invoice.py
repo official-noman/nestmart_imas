@@ -1,8 +1,8 @@
 from decimal import Decimal
 
 from django.db import models, transaction
-from django.utils.dateparse import parse_date
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact

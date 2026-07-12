@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
+
 from accounting.models import Account
+
 
 class Command(BaseCommand):
     help = 'Setup default chart of accounts'

@@ -1,7 +1,10 @@
 from rest_framework import viewsets
+
 from users.permissions import IsAdminOrReadOnly
-from .models import TaxRate, CompanyProfile
-from .serializers import TaxRateSerializer, CompanyProfileSerializer
+
+from .models import CompanyProfile, TaxRate
+from .serializers import CompanyProfileSerializer, TaxRateSerializer
+
 
 class TaxRateViewSet(viewsets.ModelViewSet):
     queryset = TaxRate.objects.all()

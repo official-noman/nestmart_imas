@@ -6,6 +6,8 @@ from .serializers import ContactSerializer
 
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Contact.with_outstanding_balance()

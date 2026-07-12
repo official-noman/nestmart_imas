@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class TaxRate(models.Model):
     name = models.CharField(max_length=100, help_text="e.g., GST 18%, VAT 15%")
     rate = models.DecimalField(max_digits=5, decimal_places=2, help_text="Percentage rate")

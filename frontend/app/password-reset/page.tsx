@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { getApiErrorData } from '@/lib/api';
+import { API_BASE_URL, getApiErrorData } from '@/lib/api';
 import { Mail, ArrowRight, Loader2, AlertCircle, CheckCircle, ChevronLeft } from 'lucide-react';
 
 export default function PasswordResetPage() {
@@ -20,7 +20,7 @@ export default function PasswordResetPage() {
     setLoading(true);
     setError(null);
     try {
-      await axios.post('http://127.0.0.1:8000/api/auth/password-reset/', { email });
+      await axios.post(`${API_BASE_URL}/api/auth/password-reset/`, { email });
       setSubmitted(true);
     } catch (err) {
       const data = getApiErrorData(err);

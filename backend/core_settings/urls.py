@@ -1,6 +1,7 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import TaxRateViewSet, CompanyProfileViewSet
+
+from .views import CompanyProfileViewSet, TaxRateViewSet
 
 router = DefaultRouter()
 router.register('taxes', TaxRateViewSet, basename='tax-rate')

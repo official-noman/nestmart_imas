@@ -81,8 +81,8 @@ def test_create_invoice_posts_journal_entry_with_correct_amount(chart_of_account
 
     lines = list(entry.lines.all())
     assert len(lines) == 2
-    debit = next(l for l in lines if l.entry_type == JournalLine.EntryType.DEBIT)
-    credit = next(l for l in lines if l.entry_type == JournalLine.EntryType.CREDIT)
+    debit = next(line for line in lines if line.entry_type == JournalLine.EntryType.DEBIT)
+    credit = next(line for line in lines if line.entry_type == JournalLine.EntryType.CREDIT)
 
     assert debit.amount == credit.amount == Decimal('150.00')
     assert debit.account.code == '1200'

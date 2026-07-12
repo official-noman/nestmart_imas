@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
-from django.db.models import Sum
+from django.db.models import DecimalField, F, OuterRef, Subquery, Sum
 from django.db.models.functions import Coalesce
 from simple_history.models import HistoricalRecords
 
@@ -34,6 +34,51 @@ class Contact(TimeStampedModel):
 
     class Meta:
         ordering = ['name']
+
+    @classmethod
+    def with_outstanding_balance(cls):
+        """Annotate every Contact with its outstanding balance in a single
+        query, for list/detail API responses -- avoids the N+1 that would
+        come from evaluating the `outstanding_balance` property (two
+        aggregate queries) per row.
+
+        Uses two correlated subqueries rather than one query joining
+        invoices to allocations, for the same reason the property does:
+        joining would multiply grand_total once per allocation row.
+        """
+        from invoices.models import Invoice
+        from payments.models import PaymentAllocation
+
+        outstanding_statuses = [
+            Invoice.Status.SENT,
+            Invoice.Status.PARTIALLY_PAID,
+            Invoice.Status.OVERDUE,
+        ]
+        money = DecimalField(max_digits=12, decimal_places=2)
+
+        invoiced_subquery = (
+            Invoice.objects.filter(customer=OuterRef('pk'), status__in=outstanding_statuses)
+            .order_by()
+            .values('customer')
+            .annotate(total=Sum('grand_total'))
+            .values('total')
+        )
+        paid_subquery = (
+            PaymentAllocation.objects.filter(
+                invoice__customer=OuterRef('pk'),
+                invoice__status__in=outstanding_statuses,
+            )
+            .order_by()
+            .values('invoice__customer')
+            .annotate(total=Sum('amount_allocated'))
+            .values('total')
+        )
+
+        return cls.objects.annotate(
+            _invoiced_total=Coalesce(Subquery(invoiced_subquery, output_field=money), Decimal('0.00')),
+            _paid_total=Coalesce(Subquery(paid_subquery, output_field=money), Decimal('0.00')),
+            outstanding_balance_annotated=F('_invoiced_total') - F('_paid_total'),
+        )
 
     @property
     def outstanding_balance(self):

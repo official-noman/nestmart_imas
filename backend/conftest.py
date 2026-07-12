@@ -3,16 +3,20 @@ from decimal import Decimal
 import factory
 import pytest
 from factory.django import DjangoModelFactory
+from rest_framework.test import APIClient
 
 from accounting.models import Account
 from contacts.models import Contact
+from core_settings.models import TaxRate
 from items.models import Item
+from payments.models import Payment
 from users.models import CustomUser
 
 
 class UserFactory(DjangoModelFactory):
     class Meta:
         model = CustomUser
+        skip_postgeneration_save = True
 
     username = factory.Sequence(lambda n: f'user{n}')
     email = factory.Sequence(lambda n: f'user{n}@example.com')
@@ -55,6 +59,46 @@ class ItemFactory(DjangoModelFactory):
     name = factory.Faker('word')
     unit_price = Decimal('100.00')
     tax_rate = Decimal('0.00')
+
+
+class PaymentFactory(DjangoModelFactory):
+    class Meta:
+        model = Payment
+
+    customer = factory.SubFactory(ContactFactory)
+    amount = Decimal('100.00')
+    payment_method = Payment.PaymentMethod.CASH
+    payment_date = '2026-07-05'
+
+
+class TaxRateFactory(DjangoModelFactory):
+    class Meta:
+        model = TaxRate
+
+    name = factory.Sequence(lambda n: f'Tax Rate {n}')
+    rate = Decimal('18.00')
+    is_active = True
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
+
+
+@pytest.fixture
+def make_authenticated_client(db):
+    """Returns a factory: call it with a role (default Viewer) to get back
+    (APIClient, user), authenticated via force_authenticate -- the standard
+    DRF way to test view/permission behavior without exercising the JWT
+    login flow itself (that's covered separately in users/tests)."""
+
+    def _make(role=CustomUser.Role.VIEWER, **kwargs):
+        user = UserFactory(role=role, **kwargs)
+        client = APIClient()
+        client.force_authenticate(user=user)
+        return client, user
+
+    return _make
 
 
 @pytest.fixture

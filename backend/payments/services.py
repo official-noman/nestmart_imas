@@ -1,6 +1,7 @@
 from django.db import transaction
 
-from accounting.models import JournalEntry, post_double_entry
+from accounting.models import JournalEntry
+from accounting.services import post_double_entry
 
 from .models import PaymentAllocation
 

@@ -5,7 +5,8 @@ from conftest import AccountFactory, ContactFactory
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
 
-from accounting.models import JournalEntry, JournalLine, create_journal_entry
+from accounting.models import JournalEntry, JournalLine
+from accounting.services import create_journal_entry
 from accounting.serializers import JournalEntrySerializer
 
 pytestmark = pytest.mark.django_db

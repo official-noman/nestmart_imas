@@ -22,7 +22,7 @@ export function useCustomerForm(onSaved: () => void) {
       await api.post('/api/v1/contacts/', { ...form, contact_type: 'Customer' });
       setSuccess(true);
       setTimeout(() => { setIsOpen(false); onSaved(); }, 1000);
-    } catch (err: any) {
+    } catch (err) {
       setFormError(parseApiError(err));
     } finally {
       setSaving(false);

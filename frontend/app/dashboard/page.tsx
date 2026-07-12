@@ -29,7 +29,7 @@ export default function DashboardPage() {
       try {
         const response = await api.get('/api/v1/reports/dashboard/');
         setMetrics(response.data);
-      } catch (err) {
+      } catch {
         setError('Failed to fetch dashboard metrics. Please try again later.');
       } finally {
         setLoading(false);

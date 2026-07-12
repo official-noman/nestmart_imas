@@ -39,7 +39,7 @@ export default function CreateAccountModal({
             <label className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Account Type</label>
             <select
               value={form.account_type}
-              onChange={(e) => setForm({ ...form, account_type: e.target.value as any })}
+              onChange={(e) => setForm({ ...form, account_type: e.target.value })}
               className="w-full px-3 py-2.5 text-sm rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all"
             >
               {ACCOUNT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}

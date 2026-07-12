@@ -19,8 +19,10 @@ export const avatarFor = (name: string, id: number) => ({
   palette: AVATAR_PALETTE[id % AVATAR_PALETTE.length],
 });
 
-export const parseApiError = (err: any): string => {
-  const d = err?.response?.data;
+import { getApiErrorData } from '@/lib/api';
+
+export const parseApiError = (err: unknown): string => {
+  const d = getApiErrorData(err);
   if (!d) return 'Something went wrong. Please try again.';
   if (typeof d === 'string') return d;
   return Object.entries(d)

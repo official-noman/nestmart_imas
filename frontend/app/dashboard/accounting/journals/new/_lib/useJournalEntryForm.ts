@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Account, Contact, JournalLineInput } from '../_types';
 import { blankLine, safeNum } from './helpers';
@@ -93,8 +93,8 @@ export function useJournalEntryForm() {
 
       await api.post('/api/v1/journal-entries/', payload);
       router.push('/dashboard/accounting/journals');
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       setGlobalError(data?.detail || JSON.stringify(data) || 'Failed to post entry.');
       setSubmitting(false);
     }

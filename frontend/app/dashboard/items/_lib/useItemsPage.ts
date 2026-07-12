@@ -77,7 +77,7 @@ export function useItemsPage() {
       });
       setSuccess(true);
       setTimeout(() => { setIsOpen(false); load(); }, 1000);
-    } catch (err: any) {
+    } catch (err) {
       setFormError(parseApiError(err));
     } finally {
       setSaving(false);

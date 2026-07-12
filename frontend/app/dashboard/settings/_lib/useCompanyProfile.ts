@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { FormEvent } from 'react';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { CompanyProfile, ToastMessage } from '../_types';
 
 export function useCompanyProfile() {
@@ -41,8 +41,8 @@ export function useCompanyProfile() {
         setProfileId(res.data.id);
       }
       setProfileToast({ message: 'Company profile saved.', type: 'success' });
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       const msg = data?.detail || data?.name?.[0] || 'Failed to save profile.';
       setProfileToast({ message: msg, type: 'error' });
     } finally {

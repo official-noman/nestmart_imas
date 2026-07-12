@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -13,12 +13,7 @@ export function useInvoices() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
-    fetchAll();
-  }, [isAuthenticated]);
-
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -40,7 +35,12 @@ export function useInvoices() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) { router.push('/login'); return; }
+    fetchAll();
+  }, [isAuthenticated, router, fetchAll]);
 
   /* ── KPI counts for header strip ── */
   const kpi = {

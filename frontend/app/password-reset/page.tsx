@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { getApiErrorData } from '@/lib/api';
 import { Mail, ArrowRight, Loader2, AlertCircle, CheckCircle, ChevronLeft } from 'lucide-react';
 
 export default function PasswordResetPage() {
@@ -21,8 +22,8 @@ export default function PasswordResetPage() {
     try {
       await axios.post('http://127.0.0.1:8000/api/auth/password-reset/', { email });
       setSubmitted(true);
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       setError(data?.detail || data?.email?.[0] || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
@@ -45,7 +46,7 @@ export default function PasswordResetPage() {
             <span className="text-white font-bold text-sm">N</span>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Forgot your password?</h1>
-          <p className="mt-1.5 text-sm text-zinc-500">Enter your registered email and we'll send you a reset token.</p>
+          <p className="mt-1.5 text-sm text-zinc-500">Enter your registered email and we&apos;ll send you a reset token.</p>
         </div>
 
         <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden">

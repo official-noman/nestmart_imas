@@ -66,7 +66,7 @@ export default function PaymentsTable({ payments, contacts, loading }: Props) {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-zinc-700">No payments yet</p>
-                      <p className="text-xs text-zinc-400 mt-0.5">Click "Record Payment" to log a new receipt.</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Click &quot;Record Payment&quot; to log a new receipt.</p>
                     </div>
                   </div>
                 </td>

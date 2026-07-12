@@ -86,14 +86,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ) : (
               <>
                 <div className="bg-zinc-800 text-zinc-200 w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm shrink-0">
-                  {((user as any).username || user.email || 'U').charAt(0).toUpperCase()}
+                  {(user.username || user.email || 'U').charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col overflow-hidden">
                   <span className="text-sm font-bold text-white truncate">
-                    {(user as any).username || user.email}
+                    {user.username || user.email}
                   </span>
                   <span className="bg-zinc-900 text-zinc-400 text-[10px] px-2 py-0.5 rounded-full font-medium uppercase tracking-wider w-fit mt-1">
-                    {(user as any).role || 'User'}
+                    {user.role || 'User'}
                   </span>
                 </div>
               </>

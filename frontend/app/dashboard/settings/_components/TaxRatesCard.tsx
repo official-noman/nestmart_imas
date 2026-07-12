@@ -56,7 +56,7 @@ export default function TaxRatesCard({
               <Tag className="w-4 h-4 text-zinc-400" />
             </div>
             <p className="text-sm font-medium text-zinc-600">No tax rates configured</p>
-            <p className="text-xs text-zinc-400">Click "Add Rate" to create your first tax rule.</p>
+            <p className="text-xs text-zinc-400">Click &quot;Add Rate&quot; to create your first tax rule.</p>
           </div>
         ) : (
           <>

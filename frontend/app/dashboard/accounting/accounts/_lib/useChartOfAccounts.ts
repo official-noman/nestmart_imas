@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Account, AccountForm } from '../_types';
 import { groupAccountsByType } from './helpers';
@@ -62,8 +62,8 @@ export function useChartOfAccounts() {
       setShowModal(false);
       setForm({ code: '', name: '', account_type: 'Asset' });
       fetchAccounts();
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       setFormError(data?.detail || data?.code?.[0] || 'Failed to create account.');
     } finally {
       setSubmitting(false);

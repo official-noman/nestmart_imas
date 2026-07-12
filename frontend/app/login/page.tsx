@@ -4,6 +4,7 @@ import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
+import { getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 
@@ -50,11 +51,12 @@ function LoginForm() {
       } else {
         setError('Unexpected response from server');
       }
-    } catch (err: any) {
-      if (err.response && err.response.data && err.response.data.detail) {
-        setError(err.response.data.detail);
-      } else if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
+    } catch (err) {
+      const data = getApiErrorData(err);
+      if (data?.detail) {
+        setError(data.detail);
+      } else if (data?.error) {
+        setError(data.error);
       } else {
         setError('Invalid credentials or server error.');
       }

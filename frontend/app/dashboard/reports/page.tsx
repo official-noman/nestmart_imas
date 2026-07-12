@@ -35,7 +35,7 @@ export default function ReportsPage() {
       try {
         const res = await api.get('/api/v1/reports/pnl/');
         setData(res.data);
-      } catch (err) {
+      } catch {
         setError('Failed to load Profit & Loss statement.');
       } finally {
         setLoading(false);

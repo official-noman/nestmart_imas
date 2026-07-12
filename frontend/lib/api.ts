@@ -37,4 +37,18 @@ api.interceptors.response.use(
   }
 );
 
+/** Safely pull the DRF error payload out of a caught axios error, without
+ * resorting to `catch (err: any)` at every call site. DRF error bodies have
+ * no fixed shape (arbitrary field -> message/array-of-messages), so the
+ * return type is deliberately loose here, at the one boundary where
+ * untyped server JSON enters the app, rather than `any`-casting at every
+ * call site that reads a field off it. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getApiErrorData(err: unknown): any {
+  if (axios.isAxiosError(err)) {
+    return err.response?.data;
+  }
+  return undefined;
+}
+
 export default api;

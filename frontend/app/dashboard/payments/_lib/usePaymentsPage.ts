@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Contact, InvoiceWithBalance, ModalForm, Payment } from '../_types';
 import { safeNum } from './helpers';
@@ -124,7 +124,7 @@ export function usePaymentsPage() {
     if (isOverAllocated) { setModalError('Cannot allocate more than total payment amount.'); return; }
 
     const allocationsPayload = Object.entries(allocations)
-      .filter(([_, amt]) => safeNum(amt) > 0)
+      .filter(([, amt]) => safeNum(amt) > 0)
       .map(([invId, amt]) => ({
         invoice: parseInt(invId),
         amount_allocated: amt,
@@ -140,8 +140,8 @@ export function usePaymentsPage() {
       });
       setShowModal(false);
       fetchData(); // Reload list
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       setModalError(data?.detail || 'Failed to record payment. Please check your inputs.');
     } finally {
       setSubmitting(false);

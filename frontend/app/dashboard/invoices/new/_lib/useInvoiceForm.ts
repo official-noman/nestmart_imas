@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
 import { Contact, Item, LineItem } from '../_types';
 import { blankLine, safeNum } from './helpers';
@@ -15,11 +15,11 @@ export function useInvoiceForm() {
   const [itemMap, setItemMap] = useState<Record<number, Item>>({});
   const [dataLoading, setDataLoading] = useState(true);
 
-  const today = new Date().toISOString().slice(0, 10);
-  const thirtyDays = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
   const [customer, setCustomer] = useState<number | ''>('');
-  const [issueDate, setIssueDate] = useState(today);
-  const [dueDate, setDueDate] = useState(thirtyDays);
+  const [issueDate, setIssueDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [dueDate, setDueDate] = useState(() =>
+    new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10)
+  );
   const [status, setStatus] = useState<'Draft' | 'Sent'>('Draft');
 
   const [lines, setLines] = useState<LineItem[]>([blankLine()]);
@@ -34,7 +34,7 @@ export function useInvoiceForm() {
 
   useEffect(() => {
     if (!isAuthenticated) router.push('/login');
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,7 +128,7 @@ export function useInvoiceForm() {
         status,
         issue_date: issueDate,
         due_date: dueDate,
-        lines: lines.map(({ uid: _uid, item, quantity, unit_price, discount, tax_rate }) => ({
+        lines: lines.map(({ item, quantity, unit_price, discount, tax_rate }) => ({
           item,
           quantity: Number(quantity),
           unit_price,
@@ -140,8 +140,8 @@ export function useInvoiceForm() {
       await api.post('/api/v1/invoices/', payload);
       setSuccess(true);
       setTimeout(() => router.push('/dashboard/invoices'), 1600);
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       if (data && typeof data === 'object') {
         const { detail, non_field_errors, ...rest } = data;
         if (detail) setGlobalError(detail);

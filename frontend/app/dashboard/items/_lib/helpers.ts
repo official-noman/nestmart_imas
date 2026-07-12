@@ -1,3 +1,5 @@
+import { getApiErrorData } from '@/lib/api';
+
 import { ItemForm } from '../_types';
 
 export const INITIAL_FORM: ItemForm = {
@@ -10,8 +12,8 @@ export const fmtUSD = (v: string | number) =>
     parseFloat(String(v)) || 0,
   );
 
-export const parseApiError = (err: any): string => {
-  const d = err?.response?.data;
+export const parseApiError = (err: unknown): string => {
+  const d = getApiErrorData(err);
   if (!d) return 'Something went wrong. Please try again.';
   if (typeof d === 'string') return d;
   return Object.entries(d)

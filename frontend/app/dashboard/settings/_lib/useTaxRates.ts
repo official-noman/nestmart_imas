@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { FormEvent } from 'react';
-import api from '@/lib/api';
+import api, { getApiErrorData } from '@/lib/api';
 import { TaxRate } from '../_types';
 
 export function useTaxRates() {
@@ -47,8 +47,8 @@ export function useTaxRates() {
       setShowTaxModal(false);
       setTaxForm({ name: '', rate: '' });
       fetchTaxes();
-    } catch (err: any) {
-      const data = err.response?.data;
+    } catch (err) {
+      const data = getApiErrorData(err);
       setTaxFormError(data?.detail || data?.name?.[0] || data?.rate?.[0] || 'Failed to create tax rate.');
     } finally {
       setTaxSubmitting(false);

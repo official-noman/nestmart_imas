@@ -21,7 +21,7 @@ const getUserFromCookie = (): User | null => {
   if (userStr) {
     try {
       return JSON.parse(userStr);
-    } catch (e) {
+    } catch {
       return null;
     }
   }

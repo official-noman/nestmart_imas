@@ -70,7 +70,7 @@ export default function InvoicesTable({ invoices, contacts, loading }: InvoicesT
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-zinc-700">No invoices yet</p>
-                      <p className="text-xs text-zinc-400 mt-0.5">Click "New Invoice" to create your first one.</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">Click &quot;New Invoice&quot; to create your first one.</p>
                     </div>
                     <Link
                       href="/dashboard/invoices/new"

@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 import pyotp
 import pytest
 from conftest import UserFactory
+from django.contrib.auth.tokens import default_token_generator
 
 pytestmark = pytest.mark.django_db
 
@@ -126,3 +129,62 @@ def test_verify_2fa_login_returns_tokens_with_valid_otp(api_client):
     # Assert
     assert response.status_code == 200
     assert 'access' in response.data
+
+
+@patch('users.serializers.send_mail')
+def test_password_reset_emails_the_token_to_the_account_owner(mock_send_mail, api_client):
+    # Arrange
+    user = UserFactory(email='user@example.com')
+
+    # Act
+    response = api_client.post('/api/auth/password-reset/', {'email': 'user@example.com'})
+
+    # Assert
+    assert response.status_code == 200
+    mock_send_mail.assert_called_once()
+    assert mock_send_mail.call_args.kwargs['recipient_list'] == [user.email]
+
+
+@patch('users.serializers.send_mail')
+def test_password_reset_rejects_unknown_email_without_sending_mail(mock_send_mail, api_client):
+    # Act
+    response = api_client.post('/api/auth/password-reset/', {'email': 'nobody@example.com'})
+
+    # Assert
+    assert response.status_code == 400
+    mock_send_mail.assert_not_called()
+
+
+def test_password_reset_confirm_changes_password_with_valid_token(api_client):
+    # Arrange
+    user = UserFactory(email='user@example.com', password='old-password')
+    token = default_token_generator.make_token(user)
+
+    # Act
+    response = api_client.post('/api/auth/password-reset-confirm/', {
+        'email': 'user@example.com',
+        'token': token,
+        'new_password': 'BrandNewPass123!',
+    })
+
+    # Assert
+    assert response.status_code == 200
+    user.refresh_from_db()
+    assert user.check_password('BrandNewPass123!')
+
+
+def test_password_reset_confirm_rejects_invalid_token(api_client):
+    # Arrange
+    user = UserFactory(email='user@example.com', password='old-password')
+
+    # Act
+    response = api_client.post('/api/auth/password-reset-confirm/', {
+        'email': 'user@example.com',
+        'token': 'not-a-real-token',
+        'new_password': 'BrandNewPass123!',
+    })
+
+    # Assert
+    assert response.status_code == 400
+    user.refresh_from_db()
+    assert user.check_password('old-password')  # unchanged

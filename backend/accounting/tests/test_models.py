@@ -4,6 +4,7 @@ import pytest
 from conftest import AccountFactory
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
+from freezegun import freeze_time
 
 from accounting.models import JournalEntry, JournalLine
 from accounting.services import create_journal_entry
@@ -11,6 +12,28 @@ from accounting.services import create_journal_entry
 from ._helpers import balanced_lines
 
 pytestmark = pytest.mark.django_db
+
+
+def test_entry_number_prefix_resets_each_year():
+    """_generate_entry_number() keys its per-year counter off
+    timezone.now().year -- only observable by controlling "now"."""
+    ar = AccountFactory(code='1200')
+    sales = AccountFactory(code='4000')
+
+    with freeze_time('2026-12-31'):
+        december_entry = create_journal_entry(
+            date='2026-12-31', description='year-end', source=JournalEntry.Source.MANUAL,
+            lines=balanced_lines(ar, sales),
+        )
+
+    with freeze_time('2027-01-01'):
+        january_entry = create_journal_entry(
+            date='2027-01-01', description='new-year', source=JournalEntry.Source.MANUAL,
+            lines=balanced_lines(ar, sales),
+        )
+
+    assert december_entry.entry_number.startswith('JE-2026-')
+    assert january_entry.entry_number.startswith('JE-2027-')
 
 
 def test_journal_entry_is_immutable_on_update():

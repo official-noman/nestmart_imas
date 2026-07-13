@@ -1,5 +1,6 @@
 import pytest
 from conftest import AccountFactory
+from test_helpers import assert_forbidden_for_role, assert_requires_authentication
 
 from users.models import CustomUser
 
@@ -7,22 +8,11 @@ pytestmark = pytest.mark.django_db
 
 
 def test_anonymous_cannot_list_accounts(api_client):
-    # Act
-    response = api_client.get('/api/v1/accounts/')
-
-    # Assert
-    assert response.status_code == 401
+    assert_requires_authentication(api_client, '/api/v1/accounts/')
 
 
 def test_viewer_cannot_list_accounts(make_authenticated_client):
-    # Arrange
-    client, _ = make_authenticated_client(role=CustomUser.Role.VIEWER)
-
-    # Act
-    response = client.get('/api/v1/accounts/')
-
-    # Assert
-    assert response.status_code == 403
+    assert_forbidden_for_role(make_authenticated_client, CustomUser.Role.VIEWER, '/api/v1/accounts/')
 
 
 def test_accountant_can_list_accounts(make_authenticated_client):

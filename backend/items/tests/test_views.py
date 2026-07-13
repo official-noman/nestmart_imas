@@ -1,5 +1,6 @@
 import pytest
 from conftest import ItemFactory
+from test_helpers import assert_requires_authentication
 
 from users.models import CustomUser
 
@@ -7,11 +8,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_anonymous_cannot_list_items(api_client):
-    # Act
-    response = api_client.get('/api/v1/items/')
-
-    # Assert
-    assert response.status_code == 401
+    assert_requires_authentication(api_client, '/api/v1/items/')
 
 
 def test_any_authenticated_role_can_list_items(make_authenticated_client):

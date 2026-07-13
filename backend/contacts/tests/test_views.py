@@ -1,39 +1,17 @@
 from decimal import Decimal
 
 import pytest
-from conftest import ContactFactory, ItemFactory
+from conftest import ContactFactory, ItemFactory, build_invoice
+from test_helpers import assert_requires_authentication
 
 from invoices.models import Invoice
-from invoices.services import create_invoice
 from users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 
 
-def _sent_invoice(customer, item, amount):
-    invoice = create_invoice(
-        customer=customer,
-        issue_date='2026-07-01',
-        due_date='2026-07-15',
-        lines=[{
-            'item': item,
-            'quantity': Decimal('1'),
-            'unit_price': amount,
-            'discount': Decimal('0.00'),
-            'tax_rate': Decimal('0.00'),
-        }],
-    )
-    invoice.status = Invoice.Status.SENT
-    invoice.save(update_fields=['status'])
-    return invoice
-
-
 def test_anonymous_cannot_list_contacts(api_client):
-    # Act
-    response = api_client.get('/api/v1/contacts/')
-
-    # Assert
-    assert response.status_code == 401
+    assert_requires_authentication(api_client, '/api/v1/contacts/')
 
 
 def test_any_authenticated_role_can_list_contacts(make_authenticated_client):
@@ -60,14 +38,14 @@ def test_contacts_list_query_count_does_not_scale_with_contact_count(
     client, _ = make_authenticated_client(role=CustomUser.Role.ACCOUNTANT)
 
     one_contact = ContactFactory()
-    _sent_invoice(one_contact, item, Decimal('100.00'))
+    build_invoice(customer=one_contact, item=item, amount=Decimal('100.00'), status=Invoice.Status.SENT)
 
     with django_assert_num_queries(1):  # single annotated SELECT, no pagination COUNT
         client.get('/api/v1/contacts/')
 
     for _ in range(4):
         c = ContactFactory()
-        _sent_invoice(c, item, Decimal('50.00'))
+        build_invoice(customer=c, item=item, amount=Decimal('50.00'), status=Invoice.Status.SENT)
 
     # Act + Assert: same query count with 5x the contacts and invoices
     with django_assert_num_queries(1):

@@ -8,8 +8,11 @@ from rest_framework.test import APIClient
 from accounting.models import Account
 from contacts.models import Contact
 from core_settings.models import TaxRate
+from invoices.models import Invoice
+from invoices.services import create_invoice
 from items.models import Item
 from payments.models import Payment
+from payments.services import create_payment_allocation
 from users.models import CustomUser
 
 
@@ -78,6 +81,44 @@ class TaxRateFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: f'Tax Rate {n}')
     rate = Decimal('18.00')
     is_active = True
+
+
+def build_invoice(*, customer, item, amount, status=Invoice.Status.DRAFT,
+                   issue_date='2026-07-01', due_date='2026-07-15'):
+    """Create a single-line invoice for `amount`, then push it to `status`.
+
+    Consolidates what used to be three near-identical local helpers
+    (payments/tests, contacts/tests, reports/tests each built a "sent
+    invoice" by hand). Going through create_invoice() first means totals,
+    the invoice number, and any journal entry are all produced the normal
+    way -- only the status transition is short-circuited here.
+    """
+    invoice = create_invoice(
+        customer=customer,
+        issue_date=issue_date,
+        due_date=due_date,
+        lines=[{
+            'item': item,
+            'quantity': Decimal('1'),
+            'unit_price': amount,
+            'discount': Decimal('0.00'),
+            'tax_rate': Decimal('0.00'),
+        }],
+    )
+    if status != invoice.status:
+        invoice.status = status
+        invoice.save(update_fields=['status'])
+    return invoice
+
+
+def build_paid_invoice(*, customer, item, amount):
+    """A SENT invoice immediately fully paid off via the normal allocation
+    service, so it ends up PAID with a real payment/allocation behind it."""
+    invoice = build_invoice(customer=customer, item=item, amount=amount, status=Invoice.Status.SENT)
+    payment = PaymentFactory(customer=customer, amount=amount)
+    create_payment_allocation(payment=payment, invoice=invoice, amount_allocated=amount)
+    invoice.refresh_from_db()
+    return invoice
 
 
 @pytest.fixture

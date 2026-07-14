@@ -131,7 +131,7 @@ def test_verify_2fa_login_returns_tokens_with_valid_otp(api_client):
     assert 'access' in response.data
 
 
-@patch('users.serializers.send_mail')
+@patch('apps.users.api.v1.serializers.send_mail')
 def test_password_reset_emails_the_token_to_the_account_owner(mock_send_mail, api_client):
     # Arrange
     user = UserFactory(email='user@example.com')
@@ -145,7 +145,7 @@ def test_password_reset_emails_the_token_to_the_account_owner(mock_send_mail, ap
     assert mock_send_mail.call_args.kwargs['recipient_list'] == [user.email]
 
 
-@patch('users.serializers.send_mail')
+@patch('apps.users.api.v1.serializers.send_mail')
 def test_password_reset_rejects_unknown_email_without_sending_mail(mock_send_mail, api_client):
     # Act
     response = api_client.post('/api/auth/password-reset/', {'email': 'nobody@example.com'})

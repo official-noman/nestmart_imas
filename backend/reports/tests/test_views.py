@@ -7,7 +7,7 @@ from test_helpers import assert_forbidden_for_role, assert_requires_authenticati
 from apps.accounting.models import Account, JournalEntry
 from apps.accounting.services import create_journal_entry
 from apps.invoices.models import Invoice
-from users.models import CustomUser
+from apps.users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 

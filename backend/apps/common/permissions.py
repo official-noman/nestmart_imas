@@ -1,6 +1,6 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
-from users.models import CustomUser
+from apps.users.models import CustomUser
 
 
 class HasRole(BasePermission):

@@ -1,8 +1,8 @@
 import pytest
 from conftest import UserFactory
 
-from users.models import CustomUser
-from users.serializers import LoginSerializer, UserRegistrationSerializer
+from apps.users.api.v1.serializers import LoginSerializer, UserRegistrationSerializer
+from apps.users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 

@@ -5,7 +5,7 @@ from conftest import ContactFactory, ItemFactory, build_invoice
 from test_helpers import assert_requires_authentication
 
 from apps.invoices.models import Invoice
-from users.models import CustomUser
+from apps.users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 

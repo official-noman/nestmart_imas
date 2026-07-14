@@ -2,7 +2,7 @@ import pytest
 from conftest import TaxRateFactory
 from test_helpers import assert_forbidden_for_role, assert_requires_authentication
 
-from users.models import CustomUser
+from apps.users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 

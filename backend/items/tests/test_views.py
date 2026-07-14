@@ -2,7 +2,7 @@ import pytest
 from conftest import ItemFactory
 from test_helpers import assert_requires_authentication
 
-from users.models import CustomUser
+from apps.users.models import CustomUser
 
 pytestmark = pytest.mark.django_db
 

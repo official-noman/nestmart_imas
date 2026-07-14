@@ -10,10 +10,10 @@ from apps.invoices.models import Invoice
 from apps.invoices.services import create_invoice
 from apps.payments.models import Payment
 from apps.payments.services import create_payment_allocation
+from apps.users.models import CustomUser
 from contacts.models import Contact
 from core_settings.models import TaxRate
 from items.models import Item
-from users.models import CustomUser
 
 
 class UserFactory(DjangoModelFactory):

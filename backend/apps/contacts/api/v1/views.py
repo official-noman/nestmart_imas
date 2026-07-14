@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Contact
+from ...selectors import get_contacts
 from .serializers import ContactSerializer
 
 
@@ -10,4 +10,4 @@ class ContactViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Contact.with_outstanding_balance()
+        return get_contacts()

@@ -6,12 +6,12 @@ from factory.django import DjangoModelFactory
 from rest_framework.test import APIClient
 
 from apps.accounting.models import Account
+from apps.contacts.models import Contact
 from apps.invoices.models import Invoice
 from apps.invoices.services import create_invoice
 from apps.payments.models import Payment
 from apps.payments.services import create_payment_allocation
 from apps.users.models import CustomUser
-from contacts.models import Contact
 from core_settings.models import TaxRate
 from items.models import Item
 

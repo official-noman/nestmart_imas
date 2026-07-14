@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 
-from contacts.models import Contact
+from apps.contacts.models import Contact
 
 from .account import Account
 from .journal_entry import IMMUTABLE_DELETE_MESSAGE, IMMUTABLE_UPDATE_MESSAGE, JournalEntry

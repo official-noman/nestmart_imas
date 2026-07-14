@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'apps.users',
-    'contacts',
+    'apps.contacts',
     'items',
     'apps.invoices',
     'apps.payments',

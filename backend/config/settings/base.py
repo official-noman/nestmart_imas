@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'apps.accounting',
     'corsheaders',
     'simple_history',
-    'core_settings',
+    'apps.core_settings',
     'reports',
 ]
 

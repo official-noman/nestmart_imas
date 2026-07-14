@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import CompanyProfile, TaxRate
+from ...models import CompanyProfile, TaxRate
 
 
 class TaxRateSerializer(serializers.ModelSerializer):

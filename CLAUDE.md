@@ -12,12 +12,14 @@ Invoice Management & Accounting System. Monorepo: Django REST API (`backend/`) +
 
 ## Settings
 
-Split into `backend/core/settings/{base,dev,prod}.py`:
+Split into `backend/config/settings/{base,dev,prod}.py`:
 - `base.py` — shared config
 - `dev.py` — local SQLite, permissive localhost defaults
 - `prod.py` — Postgres, requires `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` set explicitly via env (raises on boot if missing, no wildcard fallback)
 
-`manage.py` defaults to `core.settings.dev`; `wsgi.py`/`asgi.py` default to `core.settings.prod`. Override with the `DJANGO_SETTINGS_MODULE` env var when needed.
+`manage.py` defaults to `config.settings.dev`; `wsgi.py`/`asgi.py` default to `config.settings.prod`. Override with the `DJANGO_SETTINGS_MODULE` env var when needed.
+
+Shared, non-app code (e.g. `TimeStampedModel`/`CreatedAtModel`, the DRF exception handler) lives in `backend/common/`, not under `config/`.
 
 ## Test commands
 

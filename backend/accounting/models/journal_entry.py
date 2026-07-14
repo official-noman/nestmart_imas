@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils import timezone
 
-from core.models import CreatedAtModel
+from common.models import CreatedAtModel
 
 IMMUTABLE_UPDATE_MESSAGE = 'Posted journal entries are immutable and cannot be modified.'
 IMMUTABLE_DELETE_MESSAGE = 'Posted journal entries are immutable and cannot be deleted.'

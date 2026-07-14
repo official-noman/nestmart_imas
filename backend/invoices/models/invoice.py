@@ -6,7 +6,7 @@ from django.utils.dateparse import parse_date
 from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact
-from core.models import TimeStampedModel
+from common.models import TimeStampedModel
 
 from ._constants import TWOPLACES
 from .sequence import InvoiceNumberSequence

@@ -13,7 +13,8 @@ ignore = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = [
-    "core",
+    "config",
+    "common",
     "users",
     "contacts",
     "items",
@@ -25,4 +26,4 @@ known-first-party = [
 ]
 
 [tool.django-stubs]
-django_settings_module = "core.settings.dev"
+django_settings_module = "config.settings.dev"

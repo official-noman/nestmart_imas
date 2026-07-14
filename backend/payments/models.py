@@ -5,7 +5,7 @@ from django.db.models import Q, Sum
 from simple_history.models import HistoricalRecords
 
 from contacts.models import Contact
-from core.models import CreatedAtModel
+from common.models import CreatedAtModel
 from invoices.models import Invoice
 
 

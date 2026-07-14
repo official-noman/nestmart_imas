@@ -9,10 +9,10 @@ Reference implementation: `backend/invoices/models/invoice.py`.
 
 ## Base classes
 
-Every model that needs `created_at`/`updated_at` inherits `common.models.TimeStampedModel` (or `CreatedAtModel` if it only needs `created_at`) instead of redeclaring those fields:
+Every model that needs `created_at`/`updated_at` inherits `apps.common.models.TimeStampedModel` (or `CreatedAtModel` if it only needs `created_at`) instead of redeclaring those fields:
 
 ```python
-from common.models import TimeStampedModel
+from apps.common.models import TimeStampedModel
 
 class Invoice(TimeStampedModel):
     ...

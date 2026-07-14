@@ -14,7 +14,7 @@ ignore = ["E501"]
 [tool.ruff.lint.isort]
 known-first-party = [
     "config",
-    "common",
+    "apps",
     "users",
     "contacts",
     "items",

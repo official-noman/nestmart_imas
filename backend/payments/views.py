@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from users.permissions import IsAccountant
+from apps.common.permissions import IsAccountant
 
 from .models import CreditNote, Payment
 from .serializers import CreditNoteSerializer, PaymentSerializer

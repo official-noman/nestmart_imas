@@ -19,7 +19,7 @@ Split into `backend/config/settings/{base,dev,prod}.py`:
 
 `manage.py` defaults to `config.settings.dev`; `wsgi.py`/`asgi.py` default to `config.settings.prod`. Override with the `DJANGO_SETTINGS_MODULE` env var when needed.
 
-Shared, non-app code (e.g. `TimeStampedModel`/`CreatedAtModel`, the DRF exception handler) lives in `backend/common/`, not under `config/`.
+Shared, non-app code (e.g. `TimeStampedModel`/`CreatedAtModel`, the DRF exception handler, shared DRF permission classes) lives in `backend/apps/common/`, not under `config/`.
 
 ## Test commands
 

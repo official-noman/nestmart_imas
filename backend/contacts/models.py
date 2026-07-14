@@ -5,7 +5,7 @@ from django.db.models import DecimalField, F, OuterRef, Subquery, Sum
 from django.db.models.functions import Coalesce
 from simple_history.models import HistoricalRecords
 
-from common.models import TimeStampedModel
+from apps.common.models import TimeStampedModel
 
 
 class Contact(TimeStampedModel):

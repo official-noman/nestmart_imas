@@ -4,8 +4,8 @@ from django.db import models
 from django.db.models import Q, Sum
 from simple_history.models import HistoricalRecords
 
+from apps.common.models import CreatedAtModel
 from contacts.models import Contact
-from common.models import CreatedAtModel
 from invoices.models import Invoice
 
 

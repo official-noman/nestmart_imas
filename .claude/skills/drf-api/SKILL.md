@@ -69,7 +69,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
 
 ## Permissions
 
-Role-gated via `users/permissions.py`. Reuse an existing permission class (`IsAccountant`, `IsAdminOrReadOnly`) if it fits the role split you need; otherwise subclass `HasRole` with `allowed_roles = (...)`:
+Role-gated via `apps/common/permissions.py`. Reuse an existing permission class (`IsAccountant`, `IsAdminOrReadOnly`) if it fits the role split you need; otherwise subclass `HasRole` with `allowed_roles = (...)`:
 
 ```python
 class IsAccountant(HasRole):
@@ -80,7 +80,7 @@ Don't hand-roll `request.user.role == ...` checks inline in a view -- put them i
 
 ## URL wiring
 
-`DefaultRouter` per app, registered in that app's `urls.py`, then included from the project's root URLconf (check `backend/core/urls.py` for where to add it if this is a new app):
+`DefaultRouter` per app, registered in that app's `urls.py`, then included from the project's root URLconf (check `backend/config/urls.py` for where to add it if this is a new app):
 
 ```python
 router = DefaultRouter()

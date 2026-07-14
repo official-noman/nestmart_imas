@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import models
 from simple_history.models import HistoricalRecords
 
-from common.models import TimeStampedModel
+from apps.common.models import TimeStampedModel
 
 
 class Item(TimeStampedModel):

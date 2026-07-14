@@ -1,6 +1,6 @@
 from rest_framework import mixins, viewsets
 
-from users.permissions import IsAccountant
+from apps.common.permissions import IsAccountant
 
 from .models import Account, JournalEntry
 from .serializers import AccountSerializer, JournalEntrySerializer

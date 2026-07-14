@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.utils.dateparse import parse_date
 from simple_history.models import HistoricalRecords
 
+from apps.common.models import TimeStampedModel
 from contacts.models import Contact
-from common.models import TimeStampedModel
 
 from ._constants import TWOPLACES
 from .sequence import InvoiceNumberSequence

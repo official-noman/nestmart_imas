@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 
-from users.permissions import IsAdminOrReadOnly
+from apps.common.permissions import IsAdminOrReadOnly
 
 from .models import CompanyProfile, TaxRate
 from .serializers import CompanyProfileSerializer, TaxRateSerializer

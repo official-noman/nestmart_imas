@@ -9,11 +9,11 @@ from apps.accounting.models import Account
 from apps.contacts.models import Contact
 from apps.invoices.models import Invoice
 from apps.invoices.services import create_invoice
+from apps.items.models import Item
 from apps.payments.models import Payment
 from apps.payments.services import create_payment_allocation
 from apps.users.models import CustomUser
 from core_settings.models import TaxRate
-from items.models import Item
 
 
 class UserFactory(DjangoModelFactory):

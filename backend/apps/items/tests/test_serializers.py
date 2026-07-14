@@ -1,7 +1,7 @@
 import pytest
 from conftest import ItemFactory
 
-from items.serializers import ItemSerializer
+from apps.items.api.v1.serializers import ItemSerializer
 
 pytestmark = pytest.mark.django_db
 

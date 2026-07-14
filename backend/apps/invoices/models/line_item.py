@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import models
 from django.db.models import Q
 
-from items.models import Item
+from apps.items.models import Item
 
 from ._constants import TWOPLACES
 from .invoice import Invoice

@@ -4,8 +4,8 @@ import pytest
 from conftest import AccountFactory, ContactFactory, ItemFactory, build_invoice, build_paid_invoice
 from test_helpers import assert_forbidden_for_role, assert_requires_authentication
 
-from accounting.models import Account, JournalEntry
-from accounting.services import create_journal_entry
+from apps.accounting.models import Account, JournalEntry
+from apps.accounting.services import create_journal_entry
 from invoices.models import Invoice
 from users.models import CustomUser
 

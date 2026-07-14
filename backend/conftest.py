@@ -5,7 +5,7 @@ import pytest
 from factory.django import DjangoModelFactory
 from rest_framework.test import APIClient
 
-from accounting.models import Account
+from apps.accounting.models import Account
 from contacts.models import Contact
 from core_settings.models import TaxRate
 from invoices.models import Invoice

@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from conftest import ContactFactory, ItemFactory
 
-from accounting.models import JournalEntry, JournalLine
+from apps.accounting.models import JournalEntry, JournalLine
 from invoices.models import Invoice
 from invoices.services import create_invoice
 

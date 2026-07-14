@@ -1,8 +1,8 @@
 import pytest
 from conftest import AccountFactory
 
-from accounting.models import JournalEntry, JournalLine
-from accounting.serializers import JournalEntrySerializer
+from apps.accounting.api.v1.serializers import JournalEntrySerializer
+from apps.accounting.models import JournalEntry, JournalLine
 
 pytestmark = pytest.mark.django_db
 

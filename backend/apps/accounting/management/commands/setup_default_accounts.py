@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from accounting.models import Account
+from apps.accounting.models import Account
 
 
 class Command(BaseCommand):

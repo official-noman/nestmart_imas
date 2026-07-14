@@ -2,7 +2,7 @@ from rest_framework import mixins, viewsets
 
 from apps.common.permissions import IsAccountant
 
-from .models import Account, JournalEntry
+from ...selectors import get_accounts, get_journal_entries
 from .serializers import AccountSerializer, JournalEntrySerializer
 
 
@@ -12,7 +12,7 @@ class AccountViewSet(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Account.objects.all()
+    queryset = get_accounts()
     serializer_class = AccountSerializer
     permission_classes = [IsAccountant]
 
@@ -23,6 +23,6 @@ class JournalEntryViewSet(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = JournalEntry.objects.prefetch_related('lines__account', 'lines__contact').all()
+    queryset = get_journal_entries()
     serializer_class = JournalEntrySerializer
     permission_classes = [IsAccountant]

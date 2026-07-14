@@ -2,8 +2,8 @@ from decimal import Decimal
 
 from django.db import transaction
 
-from accounting.models import JournalEntry
-from accounting.services import post_double_entry
+from apps.accounting.models import JournalEntry
+from apps.accounting.services import post_double_entry
 
 from .models import Invoice, InvoiceLineItem
 

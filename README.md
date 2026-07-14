@@ -80,7 +80,7 @@ graph TD
     API --> RBACLayer["RBAC Permissions: IsAdmin / IsAccountant"]
     API --> Throttle["Throttling: Anon / User / Scoped"]
     API --> ServiceLayer["Service Layer: invoices/services.py, payments/services.py"]
-    ServiceLayer --> Ledger["Double-Entry Ledger Engine: accounting/models.py"]
+    ServiceLayer --> Ledger["Double-Entry Ledger Engine: apps/accounting/models.py"]
     ServiceLayer --> Database[("SQLite (Dev) / PostgreSQL (Prod)")]
     Ledger --> Database
 

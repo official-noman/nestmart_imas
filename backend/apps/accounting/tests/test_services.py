@@ -3,8 +3,8 @@ from decimal import Decimal
 import pytest
 from conftest import AccountFactory, ContactFactory
 
-from accounting.models import JournalEntry, JournalLine
-from accounting.services import create_journal_entry
+from apps.accounting.models import JournalEntry, JournalLine
+from apps.accounting.services import create_journal_entry
 
 from ._helpers import balanced_lines
 

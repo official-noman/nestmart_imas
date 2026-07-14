@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class AccountingConfig(AppConfig):
-    name = 'accounting'
+    name = 'apps.accounting'
+    label = 'accounting'

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'items',
     'invoices',
     'payments',
-    'accounting',
+    'apps.accounting',
     'corsheaders',
     'simple_history',
     'core_settings',

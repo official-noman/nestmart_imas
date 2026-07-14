@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounting.models import JournalLine
+from apps.accounting.models import JournalLine
 from apps.common.permissions import IsAccountant
 from invoices.models import Invoice
 from payments.models import PaymentAllocation

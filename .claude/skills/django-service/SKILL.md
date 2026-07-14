@@ -5,7 +5,7 @@ description: Write or modify a service-layer function in backend/<app>/services.
 
 # Service layer conventions (nestmart_imas)
 
-Reference implementation: `backend/invoices/services.py` (`create_invoice`), `backend/payments/services.py` (`create_payment_allocation`), `backend/accounting/services.py` (`post_double_entry`).
+Reference implementation: `backend/invoices/services.py` (`create_invoice`), `backend/payments/services.py` (`create_payment_allocation`), `backend/apps/accounting/services.py` (`post_double_entry`).
 
 ## The rule, and why
 

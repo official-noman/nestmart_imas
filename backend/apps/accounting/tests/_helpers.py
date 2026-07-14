@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from accounting.models import JournalLine
+from apps.accounting.models import JournalLine
 
 
 def balanced_lines(ar_account, sales_account, contact=None, amount=Decimal('100.00')):

@@ -6,8 +6,8 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
 from freezegun import freeze_time
 
-from accounting.models import JournalEntry, JournalLine
-from accounting.services import create_journal_entry
+from apps.accounting.models import JournalEntry, JournalLine
+from apps.accounting.services import create_journal_entry
 
 from ._helpers import balanced_lines
 

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./venv/bin/python manage.py check*)",
+      "Bash(./backend/venv/bin/ruff check *)",
+      "Bash(./backend/venv/bin/python -m pytest --collect-only*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/block-invoice-payment-signals.sh",
+            "statusMessage": "Checking for signal-based side effects..."
+          }
+        ]
+      }
+    ]
+  }
+}

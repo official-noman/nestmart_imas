@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { startTransition, useEffect, useState, useCallback } from 'react';
 import type { FormEvent } from 'react';
 import api, { getApiErrorData } from '@/lib/api';
 import { CompanyProfile, ToastMessage } from '../_types';
@@ -27,7 +27,7 @@ export function useCompanyProfile() {
     }
   }, []);
 
-  useEffect(() => { fetchProfile(); }, [fetchProfile]);
+  useEffect(() => { startTransition(() => { fetchProfile(); }); }, [fetchProfile]);
 
   const handleProfileSave = async (e: FormEvent) => {
     e.preventDefault();

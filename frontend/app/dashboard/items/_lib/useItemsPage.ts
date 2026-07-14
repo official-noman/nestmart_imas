@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { startTransition, useEffect, useState, useCallback, useMemo } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -8,7 +8,6 @@ import { INITIAL_FORM, parseApiError } from './helpers';
 
 export function useItemsPage() {
   const [items, setItems] = useState<Item[]>([]);
-  const [filtered, setFiltered] = useState<Item[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -30,7 +29,6 @@ export function useItemsPage() {
       const res = await api.get('/api/v1/items/');
       const data: Item[] = res.data.results ?? res.data;
       setItems(data);
-      setFiltered(data);
     } catch {
       setFetchError('Unable to load items. Check your connection and try again.');
     } finally {
@@ -40,17 +38,15 @@ export function useItemsPage() {
 
   useEffect(() => {
     if (!isAuth) { router.push('/login'); return; }
-    load();
+    startTransition(() => { load(); });
   }, [isAuth, router, load]);
 
   // ── Client-side search ─────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!query.trim()) { setFiltered(items); return; }
+  const filtered = useMemo(() => {
+    if (!query.trim()) return items;
     const q = query.toLowerCase();
-    setFiltered(
-      items.filter(i =>
-        i.name.toLowerCase().includes(q) || i.sku.toLowerCase().includes(q),
-      ),
+    return items.filter(i =>
+      i.name.toLowerCase().includes(q) || i.sku.toLowerCase().includes(q),
     );
   }, [query, items]);
 

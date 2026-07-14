@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { startTransition, useEffect, useState, useMemo } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import api, { getApiErrorData } from '@/lib/api';
@@ -64,7 +64,7 @@ export function usePaymentsPage() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) fetchData();
+    if (isAuthenticated) startTransition(() => { fetchData(); });
   }, [isAuthenticated]);
 
   /* ── Derived Data for Modal ── */

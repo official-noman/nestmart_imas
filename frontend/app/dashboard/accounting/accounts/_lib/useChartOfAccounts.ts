@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import api, { getApiErrorData } from '@/lib/api';
@@ -37,7 +37,7 @@ export function useChartOfAccounts() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) fetchAccounts();
+    if (isAuthenticated) startTransition(() => { fetchAccounts(); });
   }, [isAuthenticated]);
 
   const openModal = () => {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { startTransition, useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -39,7 +39,7 @@ export function useInvoices() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/login'); return; }
-    fetchAll();
+    startTransition(() => { fetchAll(); });
   }, [isAuthenticated, router, fetchAll]);
 
   /* ── KPI counts for header strip ── */

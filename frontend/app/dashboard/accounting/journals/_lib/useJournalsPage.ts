@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -41,7 +41,7 @@ export function useJournalsPage() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) fetchData();
+    if (isAuthenticated) startTransition(() => { fetchData(); });
   }, [isAuthenticated]);
 
   const toggleRow = (id: number) => {

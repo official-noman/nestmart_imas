@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { startTransition, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
@@ -6,7 +6,6 @@ import { Customer } from '../_types';
 
 export function useCustomerList() {
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [filtered, setFiltered] = useState<Customer[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -22,7 +21,6 @@ export function useCustomerList() {
       const res = await api.get('/api/v1/contacts/');
       const data: Customer[] = res.data.results ?? res.data;
       setCustomers(data);
-      setFiltered(data);
     } catch {
       setFetchError('Unable to load customers. Check your connection and try again.');
     } finally {
@@ -32,20 +30,18 @@ export function useCustomerList() {
 
   useEffect(() => {
     if (!isAuth) { router.push('/login'); return; }
-    load();
+    startTransition(() => { load(); });
   }, [isAuth, router, load]);
 
   // ── Client-side search ─────────────────────────────────────────────────────
-  useEffect(() => {
-    if (!query.trim()) { setFiltered(customers); return; }
+  const filtered = useMemo(() => {
+    if (!query.trim()) return customers;
     const q = query.toLowerCase();
-    setFiltered(
-      customers.filter(c =>
-        c.name.toLowerCase().includes(q) ||
-        c.email?.toLowerCase().includes(q) ||
-        c.phone?.toLowerCase().includes(q) ||
-        c.tax_id?.toLowerCase().includes(q),
-      ),
+    return customers.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      c.email?.toLowerCase().includes(q) ||
+      c.phone?.toLowerCase().includes(q) ||
+      c.tax_id?.toLowerCase().includes(q),
     );
   }, [query, customers]);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
@@ -28,11 +28,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const logout = useAuthStore((state) => state.logout);
   const user = useAuthStore((state) => state.user);
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Client-only hydration guard: server always renders `false`, client
+  // subscribes to nothing and reports `true`, so this flips exactly once
+  // after hydration without a setState-in-effect render cascade.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const handleLogout = () => {
     logout();

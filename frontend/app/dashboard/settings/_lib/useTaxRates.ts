@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { startTransition, useEffect, useState, useCallback } from 'react';
 import type { FormEvent } from 'react';
 import api, { getApiErrorData } from '@/lib/api';
 import { TaxRate } from '../_types';
@@ -26,7 +26,7 @@ export function useTaxRates() {
     }
   }, []);
 
-  useEffect(() => { fetchTaxes(); }, [fetchTaxes]);
+  useEffect(() => { startTransition(() => { fetchTaxes(); }); }, [fetchTaxes]);
 
   const openTaxModal = () => {
     setShowTaxModal(true);

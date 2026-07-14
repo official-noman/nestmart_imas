@@ -2,17 +2,17 @@ from rest_framework import viewsets
 
 from apps.common.permissions import IsAccountant
 
-from .models import CreditNote, Payment
+from ...selectors import get_credit_notes, get_payments
 from .serializers import CreditNoteSerializer, PaymentSerializer
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.prefetch_related('allocations').select_related('customer')
+    queryset = get_payments()
     serializer_class = PaymentSerializer
     permission_classes = [IsAccountant]
 
 
 class CreditNoteViewSet(viewsets.ModelViewSet):
-    queryset = CreditNote.objects.select_related('customer', 'invoice')
+    queryset = get_credit_notes()
     serializer_class = CreditNoteSerializer
     permission_classes = [IsAccountant]

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'contacts',
     'items',
     'apps.invoices',
-    'payments',
+    'apps.payments',
     'apps.accounting',
     'corsheaders',
     'simple_history',

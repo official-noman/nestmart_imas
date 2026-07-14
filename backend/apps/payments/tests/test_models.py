@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from django.db import IntegrityError, transaction
 
-from payments.models import PaymentAllocation
+from apps.payments.models import PaymentAllocation
 
 from ._helpers import make_payment
 

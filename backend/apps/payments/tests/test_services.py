@@ -6,7 +6,7 @@ from conftest import ContactFactory, ItemFactory
 from apps.accounting.models import JournalEntry, JournalLine
 from apps.invoices.models import Invoice
 from apps.invoices.services import create_invoice
-from payments.services import create_payment_allocation
+from apps.payments.services import create_payment_allocation
 
 from ._helpers import make_payment
 

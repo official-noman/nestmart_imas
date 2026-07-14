@@ -47,7 +47,7 @@ class Contact(TimeStampedModel):
         joining would multiply grand_total once per allocation row.
         """
         from apps.invoices.models import Invoice
-        from payments.models import PaymentAllocation
+        from apps.payments.models import PaymentAllocation
 
         outstanding_statuses = [
             Invoice.Status.SENT,
@@ -93,7 +93,7 @@ class Contact(TimeStampedModel):
         Contact at module load time.
         """
         from apps.invoices.models import Invoice
-        from payments.models import PaymentAllocation
+        from apps.payments.models import PaymentAllocation
 
         outstanding_statuses = [
             Invoice.Status.SENT,

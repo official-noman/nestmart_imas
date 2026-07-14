@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from apps.accounting.models import JournalLine
 from apps.common.permissions import IsAccountant
 from apps.invoices.models import Invoice
-from payments.models import PaymentAllocation
+from apps.payments.models import PaymentAllocation
 
 ZERO = Decimal('0.00')
 

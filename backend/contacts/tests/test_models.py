@@ -4,8 +4,8 @@ import pytest
 from conftest import ContactFactory, ItemFactory, PaymentFactory, build_invoice
 
 from apps.invoices.models import Invoice
+from apps.payments.services import create_payment_allocation
 from contacts.models import Contact
-from payments.services import create_payment_allocation
 
 pytestmark = pytest.mark.django_db
 

@@ -3,8 +3,8 @@ from decimal import Decimal
 from django.db import transaction
 from rest_framework import serializers
 
-from .models import CreditNote, Payment, PaymentAllocation
-from .services import create_payment_allocation
+from ...models import CreditNote, Payment, PaymentAllocation
+from ...services import create_payment_allocation
 
 
 class PaymentAllocationSerializer(serializers.ModelSerializer):

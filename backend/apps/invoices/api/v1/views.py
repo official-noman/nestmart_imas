@@ -2,12 +2,13 @@ from rest_framework import viewsets
 
 from apps.common.permissions import IsAccountant
 
-from .models import Invoice
+from ...models import Invoice
+from ...selectors import get_invoices
 from .serializers import InvoiceSerializer
 
 
 class InvoiceViewSet(viewsets.ModelViewSet):
-    queryset = Invoice.objects.prefetch_related('lines').select_related('customer')
+    queryset = get_invoices()
     serializer_class = InvoiceSerializer
     permission_classes = [IsAccountant]
 

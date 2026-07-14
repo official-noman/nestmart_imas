@@ -5,7 +5,7 @@ description: Create or modify a Django model in this project (nestmart_imas back
 
 # Django model conventions (nestmart_imas)
 
-Reference implementation: `backend/invoices/models/invoice.py`.
+Reference implementation: `backend/apps/invoices/models/invoice.py`.
 
 ## Base classes
 

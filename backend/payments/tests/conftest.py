@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 from conftest import ContactFactory, ItemFactory, build_invoice
 
-from invoices.models import Invoice
+from apps.invoices.models import Invoice
 
 
 @pytest.fixture

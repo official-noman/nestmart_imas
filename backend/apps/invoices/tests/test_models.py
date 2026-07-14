@@ -2,7 +2,7 @@ import pytest
 from conftest import ContactFactory
 from freezegun import freeze_time
 
-from invoices.models import Invoice
+from apps.invoices.models import Invoice
 
 pytestmark = pytest.mark.django_db
 

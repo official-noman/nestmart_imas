@@ -46,7 +46,7 @@ class Contact(TimeStampedModel):
         invoices to allocations, for the same reason the property does:
         joining would multiply grand_total once per allocation row.
         """
-        from invoices.models import Invoice
+        from apps.invoices.models import Invoice
         from payments.models import PaymentAllocation
 
         outstanding_statuses = [
@@ -92,7 +92,7 @@ class Contact(TimeStampedModel):
         Local imports avoid a circular import: invoices/payments both import
         Contact at module load time.
         """
-        from invoices.models import Invoice
+        from apps.invoices.models import Invoice
         from payments.models import PaymentAllocation
 
         outstanding_statuses = [

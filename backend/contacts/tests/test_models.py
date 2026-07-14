@@ -3,8 +3,8 @@ from decimal import Decimal
 import pytest
 from conftest import ContactFactory, ItemFactory, PaymentFactory, build_invoice
 
+from apps.invoices.models import Invoice
 from contacts.models import Contact
-from invoices.models import Invoice
 from payments.services import create_payment_allocation
 
 pytestmark = pytest.mark.django_db

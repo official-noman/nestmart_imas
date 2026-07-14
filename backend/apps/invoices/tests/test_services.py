@@ -4,8 +4,8 @@ import pytest
 from conftest import ContactFactory, ItemFactory
 
 from apps.accounting.models import JournalEntry, JournalLine
-from invoices.models import Invoice
-from invoices.services import create_invoice
+from apps.invoices.models import Invoice
+from apps.invoices.services import create_invoice
 
 from ._helpers import line
 

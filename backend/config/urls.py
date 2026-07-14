@@ -67,7 +67,7 @@ urlpatterns = [
     path('api/auth/', include('users.urls')),
     path('api/v1/', include('contacts.urls')),
     path('api/v1/', include('items.urls')),
-    path('api/v1/', include('invoices.urls')),
+    path('api/v1/', include('apps.invoices.api.v1.urls')),
     path('api/v1/', include('payments.urls')),
     path('api/v1/', include('apps.accounting.api.v1.urls')),
     path('api/v1/settings/', include('core_settings.urls')),

@@ -5,7 +5,7 @@ description: Write or extend backend tests for this project (nestmart_imas). Use
 
 # Backend test conventions (nestmart_imas)
 
-Reference implementation: `backend/invoices/tests/`, root `conftest.py`, root `test_helpers.py`.
+Reference implementation: `backend/apps/invoices/tests/`, root `conftest.py`, root `test_helpers.py`.
 
 ## Test runner
 
@@ -13,8 +13,8 @@ Always `pytest` from the repo root (not `manage.py test`) -- config is in root `
 
 ```bash
 pytest                              # full suite
-pytest backend/invoices             # one app
-pytest backend/invoices -k create_invoice   # one test
+pytest backend/apps/invoices             # one app
+pytest backend/apps/invoices -k create_invoice   # one test
 ```
 
 ## Structure: per-app `tests/` package
@@ -22,7 +22,7 @@ pytest backend/invoices -k create_invoice   # one test
 Each app has `backend/<app>/tests/` (a package, not a single `tests.py`), split by what's under test:
 
 ```
-backend/invoices/tests/
+backend/apps/invoices/tests/
   __init__.py
   _helpers.py       # app-local test helpers (e.g. building a line-item dict)
   test_models.py     # Invoice.calculate_totals(), status transitions, __str__

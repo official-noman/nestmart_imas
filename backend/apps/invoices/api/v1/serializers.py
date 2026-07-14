@@ -1,8 +1,8 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from .models import Invoice, InvoiceLineItem
-from .services import create_invoice
+from ...models import Invoice, InvoiceLineItem
+from ...services import create_invoice
 
 
 class InvoiceLineItemSerializer(serializers.ModelSerializer):

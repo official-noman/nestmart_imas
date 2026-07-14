@@ -5,7 +5,7 @@ description: Write or modify a service-layer function in backend/<app>/services.
 
 # Service layer conventions (nestmart_imas)
 
-Reference implementation: `backend/invoices/services.py` (`create_invoice`), `backend/payments/services.py` (`create_payment_allocation`), `backend/apps/accounting/services.py` (`post_double_entry`).
+Reference implementation: `backend/apps/invoices/services.py` (`create_invoice`), `backend/payments/services.py` (`create_payment_allocation`), `backend/apps/accounting/services.py` (`post_double_entry`).
 
 ## The rule, and why
 
@@ -51,7 +51,7 @@ See [[drf-api]] for the full serializer/view pattern.
 
 ## Cross-app calls
 
-Services may call into another app's services (e.g. `invoices/services.py` calls `accounting.services.post_double_entry`), respecting the one-directional dependency graph in root `CLAUDE.md` (`invoices` depends on `accounting`, not vice versa). Keep the account-code constants (e.g. `AR_ACCOUNT_CODE = '1200'`) as module-level constants in the calling app's `services.py`, not hardcoded inline.
+Services may call into another app's services (e.g. `apps/invoices/services.py` calls `apps.accounting.services.post_double_entry`), respecting the one-directional dependency graph in root `CLAUDE.md` (`invoices` depends on `accounting`, not vice versa). Keep the account-code constants (e.g. `AR_ACCOUNT_CODE = '1200'`) as module-level constants in the calling app's `services.py`, not hardcoded inline.
 
 ## Guard against missing setup data
 

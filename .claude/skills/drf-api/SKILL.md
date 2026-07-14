@@ -5,7 +5,7 @@ description: Add or modify a REST API endpoint in this project (nestmart_imas ba
 
 # DRF API conventions (nestmart_imas)
 
-Reference implementation: `backend/invoices/{serializers.py,views.py,urls.py}`.
+Reference implementation: `backend/apps/invoices/api/v1/{serializers.py,views.py,urls.py}`.
 
 ## Serializer
 

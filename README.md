@@ -79,7 +79,7 @@ graph TD
     API --> AuthLayer["JWT Auth + 2FA (SimpleJWT + PyOTP)"]
     API --> RBACLayer["RBAC Permissions: IsAdmin / IsAccountant"]
     API --> Throttle["Throttling: Anon / User / Scoped"]
-    API --> ServiceLayer["Service Layer: invoices/services.py, payments/services.py"]
+    API --> ServiceLayer["Service Layer: apps/invoices/services.py, payments/services.py"]
     ServiceLayer --> Ledger["Double-Entry Ledger Engine: apps/accounting/models.py"]
     ServiceLayer --> Database[("SQLite (Dev) / PostgreSQL (Prod)")]
     Ledger --> Database
@@ -288,7 +288,7 @@ Balance is enforced at two levels:
 
 ### 3. Service layer over signals
 
-Invoice and payment postings are **not** triggered by Django signals. They are explicit, synchronous calls from the serializer into `invoices/services.py::create_invoice()` and `payments/services.py::create_payment_allocation()`, each wrapped in `transaction.atomic()`. The ledger entry is only created **after** totals are calculated and confirmed non-zero — closing off the class of bug where a signal fires on row-creation before the row's real values exist.
+Invoice and payment postings are **not** triggered by Django signals. They are explicit, synchronous calls from the serializer into `apps/invoices/services.py::create_invoice()` and `payments/services.py::create_payment_allocation()`, each wrapped in `transaction.atomic()`. The ledger entry is only created **after** totals are calculated and confirmed non-zero — closing off the class of bug where a signal fires on row-creation before the row's real values exist.
 
 ### 4. Race-condition-safe numbering
 

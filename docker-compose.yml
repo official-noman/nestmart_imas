@@ -1,0 +1,61 @@
+# Local development stack.
+#   docker compose up --build
+#
+# - backend: Django dev server (config.settings.dev, SQLite), source
+#   bind-mounted for hot reload.
+# - frontend: Next.js dev server, source bind-mounted for hot reload.
+#
+# For a production-like stack (Postgres, gunicorn, standalone Next build),
+# use docker-compose.prod.yml instead.
+
+networks:
+  nestmart-network:
+    driver: bridge
+
+services:
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    image: nestmart-backend:dev
+    env_file:
+      - backend/.env
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - nestmart-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    image: nestmart-frontend:dev
+    env_file:
+      - frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+      - frontend-next-cache:/app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - nestmart-network
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          # Next.js dev (Turbopack) is memory-hungry during compiles -- 512M
+          # gets OOM-killed on first request. The prod runner (server.js,
+          # no bundler) needs far less; see docker-compose.prod.yml.
+          memory: 2G
+
+volumes:
+  frontend-node-modules:
+  frontend-next-cache:

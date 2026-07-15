@@ -362,10 +362,29 @@ The app is now live at `http://localhost:3000/`.
 
 ---
 
+## 🐳 Docker
+
+Two Compose stacks, matching the existing `dev`/`prod` settings split:
+
+```bash
+# Local development — Django dev server + SQLite, Next.js dev server,
+# both bind-mounted for hot reload. Uses backend/.env and frontend/.env.local.
+docker compose up --build
+
+# Production / staging — gunicorn + Postgres + Next.js standalone build,
+# immutable images, no bind mounts.
+cp .env.prod.example .env.prod   # fill in SECRET_KEY, ALLOWED_HOSTS, DB creds, etc.
+docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
+```
+
+Backend is at `http://localhost:8000/`, frontend at `http://localhost:3000/`. A DB-connectivity health check is exposed at `GET /health/` on the backend (used by the prod image's `HEALTHCHECK`).
+
+---
+
 ## 🗺️ Future Roadmap
 
 - [ ] **PostgreSQL as the primary target** — settings are already split and env-driven for this (`core/settings/prod.py`); remaining work is CI/staging validation against a real Postgres instance instead of SQLite.
-- [ ] **Dockerization** — `Dockerfile` + `docker-compose.yml` covering the Django API, Next.js frontend, and Postgres, for a one-command local/staging spin-up.
+- [x] **Dockerization** — `Dockerfile` + `docker-compose.yml` covering the Django API, Next.js frontend, and Postgres, for a one-command local/staging spin-up.
 - [ ] **Celery background tasks** — move overdue-invoice sweeping, email dispatch (password reset, invoice sent, payment received), and report generation off the request/response cycle and onto a scheduled worker (Celery + Redis/RabbitMQ broker).
 - [ ] **CI pipeline** — run `pytest` and `ruff check` on every PR.
 - [ ] **Multi-currency support** on invoices and the ledger.

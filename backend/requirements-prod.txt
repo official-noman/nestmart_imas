@@ -1,3 +1,8 @@
+# Runtime-only dependencies for the production Docker image.
+# Kept in sync manually with the versions pinned in requirements.txt --
+# excludes the "Dev / test tooling" section (pytest, ruff, factory_boy, ...)
+# so the prod image doesn't ship test/lint tooling.
+
 # Core framework
 Django==6.0.7
 djangorestframework==3.17.1
@@ -14,15 +19,7 @@ django-environ==0.14.0
 django-cors-headers==4.9.0
 django-simple-history==3.12.0
 drf-spectacular==0.30.0
-psycopg2-binary==2.9.12  # Postgres driver, required by config.settings.prod's default DB_ENGINE
+psycopg2-binary==2.9.12
 
 # Production server
 gunicorn==23.0.0
-
-# --- Dev / test tooling ---
-pytest==8.3.4
-pytest-django==4.9.0
-factory_boy==3.3.1
-freezegun==1.5.1
-ruff==0.8.6
-django-stubs==5.1.1

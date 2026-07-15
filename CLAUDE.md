@@ -39,3 +39,10 @@ ruff check .            # lint
 - **No signals for business logic.** Don't use `post_save`/`pre_save` signals to trigger side effects like journal entry creation. `invoices` and `payments` used to do this (`signals.py`, wired up in `apps.py::ready()`) and it caused a real bug: the invoice's journal entry was posted from the `post_save` fired at `Invoice.objects.create()`, before line items existed and `calculate_totals()` had run — so the ledger always recorded a `0.00` entry instead of the real total. Both signal files are gone; call the service function directly from the serializer instead, after totals are known.
 - **Django apps are domain modules**: `users`, `contacts`, `items`, `invoices`, `payments`, `accounting`, `core_settings`, `reports`. Keep cross-app imports one-directional where possible (e.g. `invoices` depends on `accounting`, not vice versa).
 - Env-driven config only — no hardcoded hosts, origins, or secrets in settings files.
+
+## Docker & Containerization
+When implementing/modifying Docker setups (Dockerfile, docker-compose, 
+CI/CD image builds, K8s manifests), always follow the standards defined 
+in the `docker-standards` skill. Do not write ad-hoc Dockerfiles without 
+consulting it first.
+

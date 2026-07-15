@@ -23,6 +23,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from apps.common.views import health_check
+
 
 def api_root(request):
     return JsonResponse({
@@ -52,6 +54,7 @@ def api_root(request):
 
 urlpatterns = [
     path('', api_root, name='api_root'),
+    path('health/', health_check, name='health_check'),
     path('admin/', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path(
